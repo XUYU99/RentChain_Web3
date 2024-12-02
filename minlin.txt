@@ -1,0 +1,2 @@
+yarn hardhat run src/scripts/deploy.js --network localhost
+yarn hardhat run scripts/deploy.js --network localhost
