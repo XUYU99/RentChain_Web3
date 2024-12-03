@@ -17,20 +17,20 @@ const tokenETHtoWei = (n) => {
   return ethers.utils.parseEther(n.toString());
 };
 
-export var RentalPropertyArray, RentalEscrowArray, metadataArrary;
+export var RentalPropertyArray, RentalEscrowArray;
 
 async function deploy() {
   console.log("Starting deployment...");
 
   // 从配置文件获取账户信息
-  const provider = new ethers.providers.JsonRpcProvider(HARDHAT_RPC_URL);
-  const owner = new ethers.Wallet(PRIVATE_KEY0, provider);
-  const landlord = new ethers.Wallet(PRIVATE_KEY1, provider);
-  const tenant = new ethers.Wallet(PRIVATE_KEY2, provider);
-  // const provider = new ethers.providers.JsonRpcProvider(SEPOLIA_RPC_URL);
-  // const owner = new ethers.Wallet(SEPOLIA_PRIVATE_KEY0, provider);
-  // const landlord = new ethers.Wallet(SEPOLIA_PRIVATE_KEY1, provider);
-  // const tenant = new ethers.Wallet(SEPOLIA_PRIVATE_KEY2, provider);
+  // const provider = new ethers.providers.JsonRpcProvider(HARDHAT_RPC_URL);
+  // const owner = new ethers.Wallet(PRIVATE_KEY0, provider);
+  // const landlord = new ethers.Wallet(PRIVATE_KEY1, provider);
+  // const tenant = new ethers.Wallet(PRIVATE_KEY2, provider);
+  const provider = new ethers.providers.JsonRpcProvider(SEPOLIA_RPC_URL);
+  const owner = new ethers.Wallet(SEPOLIA_PRIVATE_KEY0, provider);
+  const landlord = new ethers.Wallet(SEPOLIA_PRIVATE_KEY1, provider);
+  const tenant = new ethers.Wallet(SEPOLIA_PRIVATE_KEY2, provider);
 
   console.log("landlord 房东 Address:", landlord.address);
 
@@ -47,9 +47,9 @@ async function deploy() {
     owner
   );
 
-  RentalPropertyArray = [];
-  RentalEscrowArray = [];
-  metadataArrary = [];
+  RentalPropertyArray = new Array(3);
+  RentalEscrowArray = new Array(3);
+
   // 部署多个房产合约并处理相关逻辑
   for (let i = 1; i <= 3; i++) {
     console.log(`-----部署第 ${i} 个房产-----`);
@@ -63,7 +63,6 @@ async function deploy() {
     const tokenUrljson = `https://indigo-tiny-aardvark-637.mypinata.cloud/ipfs/QmbbwEY16WqZoLxP4mCpYrqg3YY3oeZBKYrAvQ5H7Lbtzq/${i}.json`;
     const response = await fetch(tokenUrljson);
     const metadata = await response.json();
-    metadataArrary.push(metadata);
     console.log("metadata: ", metadata);
     // 从 metadata 中提取租金和押金信息
     const rentPrice = metadata.attributes.find(
@@ -117,13 +116,11 @@ async function deploy() {
     console.log(`Approving NFT ${i} for escrow successful`);
 
     // 将合约地址存入数组
-    RentalPropertyArray.push(rentalProperty.address);
-    RentalEscrowArray.push(rentalEscrow.address);
+    RentalPropertyArray[i - 1] = rentalProperty.address;
+    RentalEscrowArray[i - 1] = rentalEscrow.address;
   }
-  console.log("metadataArray: ", metadataArrary);
-  console.log("RentalPropertyArray", RentalPropertyArray);
-  console.log("RentalEscrowArray", RentalEscrowArray);
-  console.log("deployment successful ");
+
+  console.log("deployment successful ！！！！");
 }
 
 export default deploy;

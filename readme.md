@@ -78,4 +78,3 @@ npx hardhat run scripts/deploy.js --network localhost
    ```
 
    打开浏览器访问 `http://localhost:3000`，即可看到项目的启动页面并开始与智能合约交互。
-# test

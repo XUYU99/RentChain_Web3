@@ -8,3 +8,12 @@ export const PRIVATE_KEY2 =
 export const PRIVATE_KEY3 =
   "0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6";
 export default HARDHAT_RPC_URL;
+
+export const SEPOLIA_PRIVATE_KEY0 =
+  "4ec6f4e3c56da867b4704358eb3c61573b1354fccbc19969199de87cea8b7612";
+export const SEPOLIA_PRIVATE_KEY1 =
+  "751cd505484f8676179e100084c34046e6d7d3c20a47546ecdd208b10ef08564";
+export const SEPOLIA_PRIVATE_KEY2 =
+  "e5b21f4dea343aa6cbf8e6cf02e77411c4011ee047addef753a1602166718864";
+export const SEPOLIA_RPC_URL =
+  "https://eth-sepolia.g.alchemy.com/v2/2KkFyvuudsLojSoqpr7iZiC-iWImsIKk";

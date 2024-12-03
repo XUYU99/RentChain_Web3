@@ -9,11 +9,9 @@ import Home from "./components/Home";
 // ABIs
 import RentalProperty from "./artifacts/contracts/RentalProperty.sol/RentalProperty.json";
 import RentalEscrow from "./artifacts/contracts/RentalEscrow.sol/RentalEscrow.json";
-import deploy, {
-  metadataArrary,
-  RentalPropertyArray,
-  RentalEscrowArray,
-} from "./scripts/deploy";
+import { RentalPropertyArray } from "./scripts/deploy";
+import { RentalEscrowArray } from "./scripts/deploy";
+import deploy from "./scripts/deploy";
 import {
   PRIVATE_KEY0,
   PRIVATE_KEY1,
@@ -42,12 +40,12 @@ function App() {
   const loadBlockchainData = async () => {
     try {
       // 初始化以太坊提供者（Web3Provider）
-      const provider = new ethers.providers.JsonRpcProvider(HARDHAT_RPC_URL);
-      const owner = new ethers.Wallet(PRIVATE_KEY0, provider);
-      // const provider = new ethers.providers.JsonRpcProvider(SEPOLIA_RPC_URL);
-      // const owner = new ethers.Wallet(SEPOLIA_PRIVATE_KEY0, provider);
-      // const landlord = new ethers.Wallet(SEPOLIA_PRIVATE_KEY1, provider);
-      // const tenant = new ethers.Wallet(SEPOLIA_PRIVATE_KEY2, provider);
+      // const provider = new ethers.providers.JsonRpcProvider(HARDHAT_RPC_URL);
+      // const owner = new ethers.Wallet(PRIVATE_KEY0, provider);
+      const provider = new ethers.providers.JsonRpcProvider(SEPOLIA_RPC_URL);
+      const owner = new ethers.Wallet(SEPOLIA_PRIVATE_KEY0, provider);
+      const landlord = new ethers.Wallet(SEPOLIA_PRIVATE_KEY1, provider);
+      const tenant = new ethers.Wallet(SEPOLIA_PRIVATE_KEY2, provider);
       setProvider(provider);
 
       // 定义一个数组来存储所有房产信息
@@ -65,22 +63,8 @@ function App() {
       // 遍历加载房产信息
       for (let i = 0; i < 3; i++) {
         // 获取房产合约实例
-        // const rentalProperty = new ethers.Contract(
-        //   rentalPropertyAddress[i],
-        //   RentalProperty.abi,
-        //   provider
-        // );
-        // setRentalProperty(rentalProperty); // 设置当前房产实例
-
-        // // 获取租赁托管合约实例
-        // const rentalEscrow = new ethers.Contract(
-        //   rentalEscrowAddress[i],
-        //   RentalEscrow.abi,
-        //   provider
-        // );
-        // setRentalEscrow(rentalEscrow); // 设置当前租赁托管合约实例
         const rentalProperty = new ethers.Contract(
-          RentalPropertyArray[i],
+          rentalPropertyAddress[i],
           RentalProperty.abi,
           provider
         );
@@ -88,15 +72,29 @@ function App() {
 
         // 获取租赁托管合约实例
         const rentalEscrow = new ethers.Contract(
-          RentalEscrowArray[i],
+          rentalEscrowAddress[i],
           RentalEscrow.abi,
           provider
         );
         setRentalEscrow(rentalEscrow); // 设置当前租赁托管合约实例
+        // const rentalProperty = new ethers.Contract(
+        //   RentalPropertyArray[i],
+        //   RentalProperty.abi,
+        //   provider
+        // );
+        // setRentalProperty(rentalProperty); // 设置当前房产实例
+
+        // // 获取租赁托管合约实例
+        // const rentalEscrow = new ethers.Contract(
+        //   RentalEscrowArray[i],
+        //   RentalEscrow.abi,
+        //   provider
+        // );
+        // setRentalEscrow(rentalEscrow); // 设置当前租赁托管合约实例
         // 从 RentalProperty 合约中获取房产的 Token URI
-        // const uri = await rentalProperty.tokenURI(tokenId);
-        // const response = await fetch(uri); // 请求 URI 获取房产元数据
-        const metadata = metadataArrary[i]; // 解析返回的 JSON 数据
+        const uri = await rentalProperty.tokenURI(tokenId);
+        const response = await fetch(uri); // 请求 URI 获取房产元数据
+        const metadata = await response.json(); // 解析返回的 JSON 数据
 
         // 从 RentalEscrow 合约中获取房产租赁信息
         // propertyInfo -> [landlord, isAvailable, rentPrice, securityDeposit, tenant]
@@ -121,7 +119,14 @@ function App() {
           image: metadata.image, // 房产图片链接
           attributes: metadata.attributes, //其他属性
         });
-
+        // fleshDetail.push({
+        //   isRented: isRented,
+        //   isAvailable: isAvailable, // 是否可租
+        //   rentPrice: ethers.utils.formatEther(rentPrice), // 租金
+        //   securityDeposit: ethers.utils.formatEther(securityDeposit), // 押金
+        //   rentalPropertyAddress: rentalProperty.address, // 房产合约地址
+        //   rentalEscrowAddress: rentalEscrow.address, // 房产托管合约地址
+        // });
         console.log(`第 ${i + 1} 个房产获取成功`);
       }
 

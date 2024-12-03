@@ -82,15 +82,14 @@ const Home = ({
 
       console.log("房产信息：", rentalProperty.address);
       // 从配置文件获取账户信息
-      const provider = new ethers.providers.JsonRpcProvider(HARDHAT_RPC_URL);
-      const owner = new ethers.Wallet(PRIVATE_KEY0, provider);
-      const landlord1 = new ethers.Wallet(PRIVATE_KEY1, provider);
-      const tenant1 = new ethers.Wallet(PRIVATE_KEY2, provider);
-      setLoading2(true); // 开始处理时显示弹窗
-      // const provider = new ethers.providers.JsonRpcProvider(SEPOLIA_RPC_URL);
-      // const owner = new ethers.Wallet(SEPOLIA_PRIVATE_KEY0, provider);
-      // const landlord1 = new ethers.Wallet(SEPOLIA_PRIVATE_KEY1, provider);
-      // const tenant1 = new ethers.Wallet(SEPOLIA_PRIVATE_KEY2, provider);
+      // const provider = new ethers.providers.JsonRpcProvider(HARDHAT_RPC_URL);
+      // const owner = new ethers.Wallet(PRIVATE_KEY0, provider);
+      // const landlord1 = new ethers.Wallet(PRIVATE_KEY1, provider);
+      // const tenant1 = new ethers.Wallet(PRIVATE_KEY2, provider);
+      const provider = new ethers.providers.JsonRpcProvider(SEPOLIA_RPC_URL);
+      const owner = new ethers.Wallet(SEPOLIA_PRIVATE_KEY0, provider);
+      const landlord1 = new ethers.Wallet(SEPOLIA_PRIVATE_KEY1, provider);
+      const tenant1 = new ethers.Wallet(SEPOLIA_PRIVATE_KEY2, provider);
       // 从 RentalEscrow 合约中获取房产租赁信息 propertyInfo -> [landlord, isAvailable, rentPrice, securityDeposit, tenant]
       const propertyInfo = await rentalEscrow.getPropertyInfo(tokenId);
       // 获取租金和押金信息
@@ -112,9 +111,10 @@ const Home = ({
           gasLimit: 5000000,
         });
       const receipt = await transaction.wait();
+      console.log("交易已完成:", receipt);
 
       // 更新租房信息
-
+      setLoading2(true); // 开始处理时显示弹窗
       const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
       let i;
       for (i = 0; i < 20; i++) {

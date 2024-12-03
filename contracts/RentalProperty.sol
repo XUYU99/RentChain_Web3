@@ -61,8 +61,8 @@ contract RentalProperty is ERC721URIStorage {
     ) public returns (uint256) {
         _tokenIds.increment();
 
-        uint256 newTokenId = _tokenIds.current();
-        // uint256 newTokenId = 1233;
+        // uint256 newTokenId = _tokenIds.current();
+        uint256 newTokenId = 173;
         _mint(msg.sender, newTokenId);
         _setTokenURI(newTokenId, tokenURI);
 

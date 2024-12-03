@@ -366,7 +366,7 @@ header {
   background-color: #fff; /* 背景色可以根据需要调整 */
   padding: 20px;
   border-radius: 10px; /* 可选，圆角 */
-  font-size: 24px; /* 字体大小 */
+  font-size: 20px; /* 字体大小 */
   color: #333; /* 字体颜色 */
   display: flex; /* 使用 flexbox */
   justify-content: center; /* 水平居中 */
@@ -377,7 +377,7 @@ header {
   width: 40%;
   height: 30%;
   border-radius: 10px; /* 可选，圆角 */
-  font-size: 24px; /* 字体大小 */
+  font-size: 20px; /* 字体大小 */
   color: #333; /* 字体颜色 */
   display: flex; /* 使用 flexbox */
   justify-content: center; /* 水平居中 */
@@ -390,7 +390,7 @@ header {
   margin-left: 40px;
   border: none;
   border-radius: 4px;
-  font-size: 22px;
+  font-size: 20px;
   font-family: "Open Sans";
   font-weight: 600;
   cursor: pointer;
