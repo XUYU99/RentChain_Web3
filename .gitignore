@@ -4,7 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
-/components/accountSetting.js
+/src/components/accountSetting.js
 
 # testing
 /coverage
