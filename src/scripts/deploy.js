@@ -5,7 +5,7 @@ import {
   PRIVATE_KEY0,
   PRIVATE_KEY1,
   PRIVATE_KEY2,
-  HARDHAT_RPC_URL,
+  RPC_URL,
   SEPOLIA_PRIVATE_KEY0,
   SEPOLIA_PRIVATE_KEY1,
   SEPOLIA_PRIVATE_KEY2,
@@ -17,20 +17,19 @@ const tokenETHtoWei = (n) => {
   return ethers.utils.parseEther(n.toString());
 };
 
-export var RentalPropertyArray, RentalEscrowArray, metadataArrary;
+export var RentalPropertyArray, RentalEscrowArray, metadataArrary, tokenId;
 
 async function deploy() {
   console.log("Starting deployment...");
 
   // 从配置文件获取账户信息
-  const provider = new ethers.providers.JsonRpcProvider(HARDHAT_RPC_URL);
-  const owner = new ethers.Wallet(PRIVATE_KEY0, provider);
-  const landlord = new ethers.Wallet(PRIVATE_KEY1, provider);
-  const tenant = new ethers.Wallet(PRIVATE_KEY2, provider);
-  // const provider = new ethers.providers.JsonRpcProvider(SEPOLIA_RPC_URL);
-  // const owner = new ethers.Wallet(SEPOLIA_PRIVATE_KEY0, provider);
-  // const landlord = new ethers.Wallet(SEPOLIA_PRIVATE_KEY1, provider);
-  // const tenant = new ethers.Wallet(SEPOLIA_PRIVATE_KEY2, provider);
+  const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+  // const owner = new ethers.Wallet(PRIVATE_KEY0, provider);
+  // const landlord = new ethers.Wallet(PRIVATE_KEY1, provider);
+  // const tenant = new ethers.Wallet(PRIVATE_KEY2, provider);
+  const owner = new ethers.Wallet(SEPOLIA_PRIVATE_KEY0, provider);
+  const landlord = new ethers.Wallet(SEPOLIA_PRIVATE_KEY1, provider);
+  const tenant = new ethers.Wallet(SEPOLIA_PRIVATE_KEY2, provider);
 
   console.log("landlord 房东 Address:", landlord.address);
 
@@ -89,8 +88,8 @@ async function deploy() {
     console.log("交易结果:", transactionawaitTx);
 
     // 获取 tokenId
-    const newItemId = await rentalProperty.getnewTokenId();
-    console.log("tokenId:", newItemId.toString());
+    tokenId = await rentalProperty.getnewTokenId();
+    console.log("tokenId:", tokenId.toString());
 
     // 创建托管合约，并将 NFT 授权给托管合约
     const rentalEscrow = await escrowFactory.deploy(
@@ -102,7 +101,7 @@ async function deploy() {
     // 授权租赁合约托管该 NFT
     const approveTx = await rentalProperty
       .connect(landlord)
-      .approve(rentalEscrow.address, newItemId, {
+      .approve(rentalEscrow.address, tokenId, {
         gasLimit: 5000000, // 设定足够的 gas limit
       });
     await approveTx.wait();
@@ -117,12 +116,12 @@ async function deploy() {
     console.log(`Approving NFT ${i} for escrow successful`);
 
     // 将合约地址存入数组
-    RentalPropertyArray.push(rentalProperty.address);
-    RentalEscrowArray.push(rentalEscrow.address);
+    RentalPropertyArray.push(rentalProperty);
+    RentalEscrowArray.push(rentalEscrow);
   }
   console.log("metadataArray: ", metadataArrary);
-  console.log("RentalPropertyArray", RentalPropertyArray);
-  console.log("RentalEscrowArray", RentalEscrowArray);
+  console.log("rentalPropertyArray", RentalPropertyArray);
+  console.log("rentalEscrowArray", RentalEscrowArray);
   console.log("deployment successful ");
 }
 

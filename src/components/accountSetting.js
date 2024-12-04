@@ -17,3 +17,6 @@ export const SEPOLIA_PRIVATE_KEY2 =
   "e5b21f4dea343aa6cbf8e6cf02e77411c4011ee047addef753a1602166718864";
 export const SEPOLIA_RPC_URL =
   "https://eth-sepolia.g.alchemy.com/v2/2KkFyvuudsLojSoqpr7iZiC-iWImsIKk";
+
+export const RPC_URL =
+  "https://eth-sepolia.g.alchemy.com/v2/2KkFyvuudsLojSoqpr7iZiC-iWImsIKk";

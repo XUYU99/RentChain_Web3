@@ -1,257 +1,205 @@
-import { ethers } from "ethers";
 import { useEffect, useState } from "react";
-import close from "../assets/close.svg";
-import { getAddress } from "ethers/lib/utils";
+import { ethers } from "ethers";
+
+// Components
+import Navigation from "../components/Navigation";
+import Search from "../components/Search";
+import Detail from "../components/Detail";
+import RentalProperty from "../../src/artifacts/contracts/RentalProperty.sol/RentalProperty.json"; // 导入 RentalProperty 合约的 ABI 和 bytecode
+import RentalEscrow from "../../src/artifacts/contracts/RentalEscrow.sol/RentalEscrow.json"; // 导入 RentalEscrow 合约的 ABI 和 bytecode
+
+// ABIs
+import deploy, {
+  RentalPropertyArray,
+  RentalEscrowArray,
+  metadataArrary,
+  tokenId,
+} from "../scripts/deploy";
 import {
   PRIVATE_KEY0,
   PRIVATE_KEY1,
   PRIVATE_KEY2,
-  HARDHAT_RPC_URL,
+  RPC_URL,
   SEPOLIA_PRIVATE_KEY0,
   SEPOLIA_PRIVATE_KEY1,
   SEPOLIA_PRIVATE_KEY2,
   SEPOLIA_RPC_URL,
 } from "../components/accountSetting";
-import RentalProperty from "../../src/artifacts/contracts/RentalProperty.sol/RentalProperty.json";
-import RentalEscrow from "../../src/artifacts/contracts/RentalEscrow.sol/RentalEscrow.json";
-
-const Home = ({
-  property,
-  provider,
-  account,
-  togglePop,
-  loadBlockchainData,
-}) => {
-  // 状态变量
-  const [isRented, setIsRented] = useState(false); // 当前用户是否租了
-  const [currentTenant, setCurrentTenant] = useState(null); // 当前租客地址
-  const [currentLandlord, setCurrentLandlord] = useState(null); // 房东地址
-  const [loading, setLoading] = useState(true); // 加载状态
-  const [error, setError] = useState(null); // 错误状态
-  const [loading2, setLoading2] = useState(false);
-  const [loading3, setLoading3] = useState(false);
+function Home({ account, setAccount }) {
+  const [provider, setProvider] = useState(null);
+  const [properties, setProperties] = useState([]);
+  const [property, setSelectedProperty] = useState({});
+  const [toggle, setToggle] = useState(false); // rentProperty detail 窗口
   const tokenId = 173;
-  // 检查角色
-  const isCurrentUserTenant =
-    currentTenant &&
-    account &&
-    currentTenant.toLowerCase() === account.toLowerCase();
-  const isCurrentUserLandlord =
-    currentLandlord &&
-    account &&
-    currentLandlord.toLowerCase() === account.toLowerCase();
-  // 获取房产、租赁托管 合约实例
-  const rentalProperty = new ethers.Contract(
-    property.rentalPropertyAddress,
-    RentalProperty.abi,
-    provider
-  );
+  async function deployOnclick() {
+    await deploy(); // 调用部署函数
+    // 刷新页面信息
+    // loadBlockchainData();
+  }
 
-  const rentalEscrow = new ethers.Contract(
-    property.rentalEscrowAddress,
-    RentalEscrow.abi,
-    provider
-  );
+  const loadBlockchainData = async () => {
+    // try {
+    // 初始化以太坊提供者（Web3Provider）
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+    setProvider(provider);
 
-  // 获取详细信息
-  const fetchDetails = async () => {
-    try {
-      setLoading(true);
-      setError(null);
+    // 定义一个数组来存储所有房产信息
+    const properties = [];
+    const rentalPropertyAddress = [
+      "0xcf21E55e76daa50Dd804d97B176ee4aD19a31498",
+      "0x1C8f18633A476e132cF38f1aE33dC09d7a2B38d5",
+      "0xe291A8Fc5811d2f6980f43A60E8A8fA4C0dCD018",
+    ];
+    const rentalEscrowAddress = [
+      "0x107c8AE66Fd64D32BdE5d9BC8183b535B4A2b7CF",
+      "0x082e7D309Ea4115370361dC140c48736497AE5f3",
+      "0x38fA8F6FA4F3FC586B52deBf5Ab2B0c7DDEAF312",
+    ];
+    // 遍历加载房产信息
+    for (let i = 0; i < 3; i++) {
+      // 获取房产合约实例
+      const rentalProperty = new ethers.Contract(
+        rentalPropertyAddress[i],
+        RentalProperty.abi,
+        provider
+      );
 
-      // console.log("property: ", property);
-      // 获取租客地址和租赁状态
+      // 获取租赁托管合约实例
+      const rentalEscrow = new ethers.Contract(
+        rentalEscrowAddress[i],
+        RentalEscrow.abi,
+        provider
+      );
+      console.log("111");
+      // 获取 房产和租赁托管 合约实例
+      // const rentalProperty = RentalPropertyArray[i];
+
+      // const rentalEscrow = RentalEscrowArray[i];
+      // 请求 URI 获取房产元数据
+      const uri = await rentalProperty.tokenURI(tokenId);
+      const response = await fetch(uri);
+      const metadata = await response.json();
+      // 从 RentalEscrow 合约中获取房产租赁信息
+
+      // propertyInfo -> [landlord, isAvailable, rentPrice, securityDeposit, tenant]
+      console.log("222");
       const [landlord, isAvailable, rentPrice, securityDeposit, tenant] =
         await rentalEscrow.getPropertyInfo(tokenId);
-      console.log("当前房屋获取租客地址为：", tenant);
-      if (tenant !== "0x0000000000000000000000000000000000000000") {
-        setIsRented(true); // 或者设置为其他默认地址
-      }
-      setCurrentTenant(tenant);
-    } catch (error) {
-      console.error("Error fetching details:", error);
-      setError("Error fetching property details");
-    } finally {
-      setLoading(false);
+      // console.log("租客地址: ", tenant);
+      let isRented = await rentalProperty.isRented(tokenId);
+
+      // 将房产信息存入 properties 数组中
+      properties.push({
+        landlord: landlord, //房东地址
+        isAvailable: isAvailable, // 是否可租
+        rentPrice: ethers.utils.formatEther(rentPrice), // 租金
+        securityDeposit: ethers.utils.formatEther(securityDeposit), // 押金
+        id: tokenId, // 房产编号
+        rentalProperty: rentalProperty,
+        rentalEscrow: rentalEscrow,
+        rentalPropertyAddress: rentalProperty.address, // 房产合约地址
+        rentalEscrowAddress: rentalEscrow.address, // 房产托管合约地址
+        isRented: isRented,
+        name: metadata.name, // 房产名称
+        tenant: tenant, // 租客地址
+        description: metadata.description, // 房产描述
+        image: metadata.image, // 房产图片链接
+        attributes: metadata.attributes, //其他属性
+      });
+
+      console.log(`第 ${i + 1} 个房产获取成功`);
     }
+
+    // 将获取的房产列表设置到状态
+    setProperties(properties);
+    console.log("全部房产信息获取完成");
+
+    // 获取用户钱包账户地址
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts", // 请求用户钱包地址
+    });
+    const account = ethers.utils.getAddress(accounts[0]); // 格式化地址
+    setAccount(account); // 将用户地址存储到状态
+
+    // 监听账户变化事件
+    window.ethereum.on("accountsChanged", async () => {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts", // 请求新的用户钱包地址
+      });
+      const account = ethers.utils.getAddress(accounts[0]); // 格式化新地址
+      setAccount(account); // 更新状态中的用户地址
+    });
+    // } catch (error) {
+    //   // 捕获并打印错误
+    //   console.error("Error loading blockchain data:", error);
+    // }
   };
 
-  const rentOnclick = async () => {
-    try {
-      console.log("出租处理");
-
-      console.log("房产信息：", rentalProperty.address);
-      // 从配置文件获取账户信息
-      const provider = new ethers.providers.JsonRpcProvider(HARDHAT_RPC_URL);
-      const owner = new ethers.Wallet(PRIVATE_KEY0, provider);
-      const landlord1 = new ethers.Wallet(PRIVATE_KEY1, provider);
-      const tenant1 = new ethers.Wallet(PRIVATE_KEY2, provider);
-      setLoading2(true); // 开始处理时显示弹窗
-      // const provider = new ethers.providers.JsonRpcProvider(SEPOLIA_RPC_URL);
-      // const owner = new ethers.Wallet(SEPOLIA_PRIVATE_KEY0, provider);
-      // const landlord1 = new ethers.Wallet(SEPOLIA_PRIVATE_KEY1, provider);
-      // const tenant1 = new ethers.Wallet(SEPOLIA_PRIVATE_KEY2, provider);
-      // 从 RentalEscrow 合约中获取房产租赁信息 propertyInfo -> [landlord, isAvailable, rentPrice, securityDeposit, tenant]
-      const propertyInfo = await rentalEscrow.getPropertyInfo(tokenId);
-      // 获取租金和押金信息
-      const rentPrice = propertyInfo[2];
-      const securityDeposit = propertyInfo[3];
-      const totalAmount = rentPrice.add(securityDeposit);
-
-      // 获取房东地址的余额
-      const landlordAddress = propertyInfo[0];
-      let landlordBalance = await provider.getBalance(landlordAddress);
-      let landlordBalanceInEth = ethers.utils.formatEther(landlordBalance);
-      console.log("房东余额: ", landlordBalanceInEth, "ETH");
-
-      // 开始租房
-      const transaction = await rentalEscrow
-        .connect(tenant1)
-        .createRental(property.id, 1, {
-          value: totalAmount,
-          gasLimit: 5000000,
-        });
-      const receipt = await transaction.wait();
-
-      // 更新租房信息
-
-      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-      let i;
-      for (i = 0; i < 20; i++) {
-        const isRented1 = await rentalProperty.isRented(tokenId);
-        if (isRented1 === false) {
-          console.log(`更新租房信息中... `);
-          await delay(3000); // 等待 3 秒
-        } else {
-          setIsRented(true);
-          console.log("租房已完成");
-          break;
-        }
-      }
-      if (i == 20) {
-        console.log("租房失败！！");
-      } else {
-        landlordBalance = await provider.getBalance(landlordAddress);
-        landlordBalanceInEth = ethers.utils.formatEther(landlordBalance);
-        console.log("租房后，房东余额: ", landlordBalanceInEth, "ETH");
-
-        const [, , , , tenant] = await rentalEscrow.getPropertyInfo(tokenId);
-        setCurrentTenant(tenant);
-        console.log("租房后，当前房屋租客地址为：", tenant);
-      }
-      await loadBlockchainData();
-
-      setLoading2(false); // 完成后隐藏弹窗
-      setLoading3(true); // 租房成功弹窗
-    } catch (error) {
-      console.error("Error in tenant handling:", error);
-      setError("Error processing rental request");
-    }
+  // 切换弹出框的状态，并设置当前选中的房产信息
+  const togglePop = (property) => {
+    setSelectedProperty(property); // 设置选中的房产信息
+    setToggle(!toggle); // 切换弹出框状态（显示/隐藏）
   };
-  // 点击确认关闭租房成功弹窗
-  const successMessageOnclick = () => {
-    setLoading3(false); // 关闭弹窗
-    setIsRented(true); // 更新租赁状态
-  };
-  // 加载数据
-  useEffect(() => {
-    fetchDetails();
-    // fetchOwner();
-  }, []);
-  // // 加载数据
-  // useEffect(() => {
-  //   fetchDetails();
-  //   // fetchOwner();
-  // }, [account, property.id, isPropertyRented]);
 
-  if (loading) return <div className="home__loading">Loading...</div>;
-  if (error) return <div className="home__error">Error: {error}</div>;
+  // 点击按钮时手动调用加载区块链数据函数
+  function loadBlockchainDataOnclick() {
+    loadBlockchainData(); // 调用主加载函数
+  }
 
   return (
-    <div className="home">
-      <div className="home__details">
-        {loading2 && (
-          <div className="loading-overlay">
-            <div className="loading-spinner">正在处理中...</div>
-          </div>
-        )}
-        {/* 租房成功的弹窗 */}
-        {loading3 && (
-          <div className="loading-overlay">
-            <div className="loading-successmessage">
-              <div>租房成功～</div>
-              <div>
-                <button
-                  type="button"
-                  className="successmessage-button"
-                  onClick={successMessageOnclick}
-                >
-                  确认
-                </button>
+    <div>
+      <Navigation account={account} setAccount={setAccount} />
+      <Search />
+
+      <div className="cards__section">
+        <h3>
+          <button onClick={deployOnclick}>deploy</button>{" "}
+          <button onClick={loadBlockchainDataOnclick}>reflesh</button>{" "}
+          Properties For Rent
+        </h3>
+        <hr />
+        <div className="cards">
+          {properties.map((property, index) => (
+            <div
+              className="card"
+              key={index}
+              onClick={() => togglePop(property)}
+            >
+              <div className="card__image">
+                <img src={property.image} alt="Property" />
+              </div>
+              <div className="card__info">
+                <h4>{property.name}</h4>
+                <p>
+                  <strong>{property.rentPrice}</strong> ETH/month |
+                  <strong>{property.securityDeposit}</strong> ETH deposit
+                </p>
+                {property.attributes && (
+                  <p>
+                    <strong>{property.attributes[6]?.value}</strong> bds |
+                    <strong>{property.attributes[7]?.value}</strong> ba |
+                    <strong>{property.attributes[4]?.value}</strong> sqft
+                  </p>
+                )}
+                <p className="availability">
+                  {property.isRented ? "🔴 Rented" : "🟢 Available"}
+                </p>
               </div>
             </div>
-          </div>
-        )}
-
-        <div className="home__image">
-          <img src={property.image} alt="Home" />
+          ))}
         </div>
-        <div className="home__overview">
-          <h1>{property.name}</h1>
-          <p>
-            <strong>{property.attributes[6].value}</strong> bds |
-            <strong>{property.attributes[7].value}</strong> ba |
-            <strong>{property.attributes[4].value}</strong> sqft
-          </p>
-          <p>
-            <a
-              href={`https://sepolia.etherscan.io/address/${property.rentalPropertyAddress}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {property.rentalPropertyAddress}
-            </a>
-          </p>
-          <h2>{property.attributes[0].value} ETH</h2>
-
-          {isRented ? (
-            <div>
-              <div className="home__owned">rented</div>
-              <div>tenant:{currentTenant}</div>
-            </div>
-          ) : (
-            <div>
-              <button className="home__contact" onClick={rentOnclick}>
-                Rent
-              </button>
-            </div>
-          )}
-
-          <hr />
-
-          <h2>Overview</h2>
-
-          <p>{property.description}</p>
-
-          <hr />
-
-          <h2>Facts and features</h2>
-
-          <ul>
-            {property.attributes.map((attribute, index) => (
-              <li key={index}>
-                <strong>{attribute.trait_type}</strong> : {attribute.value}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <button onClick={togglePop} className="home__close">
-          <img src={close} alt="Close" />
-        </button>
       </div>
+
+      {toggle && (
+        <Detail
+          property={property}
+          togglePop={togglePop}
+          loadBlockchainData={loadBlockchainData}
+          tokenId={tokenId}
+        />
+      )}
     </div>
   );
-};
+}
 
 export default Home;

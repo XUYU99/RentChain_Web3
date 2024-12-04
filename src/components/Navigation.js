@@ -1,23 +1,43 @@
 import { ethers } from "ethers";
 import logo from "../assets/logo.svg";
+import { useNavigate } from "react-router-dom";
 
 const Navigation = ({ account, setAccount }) => {
-  const connectHandler = async () => {
-    const accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    const account = ethers.utils.getAddress(accounts[0]);
-    setAccount(account);
+  const navigate = useNavigate();
+  const aboutOnclick = () => {
+    navigate("/About");
+  };
+  const homeOnclick = () => {
+    navigate("/");
+  };
+  const connectOnclick = async () => {
+    // 检查窗口对象是否包含 ethereum 对象（MetaMask 注入的对象）
+    if (typeof window.ethereum !== "undefined") {
+      // 请求连接 MetaMask 钱包
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      const account = ethers.utils.getAddress(accounts[0]);
+      setAccount(account);
+      console.log("Connected address:", account);
+    } else {
+      alert("MetaMask is not installed. Please install MetaMask !!!!");
+      console.log("MetaMask is not installed.");
+    }
   };
 
   return (
     <nav>
       <ul className="nav__links">
         <li>
-          <a href="#">Browse</a>
+          <a href="#" onClick={aboutOnclick}>
+            About
+          </a>
         </li>
         <li>
-          <a href="#">My Rentals</a>
+          <a href="#" onClick={homeOnclick}>
+            Home
+          </a>
         </li>
         <li>
           <a href="#">List Property</a>
@@ -31,7 +51,7 @@ const Navigation = ({ account, setAccount }) => {
       <div className="nav_address">
         {account ? (
           <div className="nav__account">
-            <button type="button" className="success-button">
+            <button type="button" className="nav__connect">
               {account.slice(0, 6) + "..." + account.slice(38, 42)}
             </button>
           </div>
@@ -39,7 +59,7 @@ const Navigation = ({ account, setAccount }) => {
           <button
             type="button"
             className="nav__connect"
-            onClick={connectHandler}
+            onClick={connectOnclick}
           >
             Connect Wallet
           </button>
