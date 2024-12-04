@@ -5,6 +5,7 @@ import { ethers } from "ethers";
 import Navigation from "./components/Navigation";
 import About from "./components/About";
 import Home from "./components/Home";
+import Kokoworld from "./components/01-kokoWorld";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 function App() {
   const [account, setAccount] = useState(null);
@@ -18,8 +19,8 @@ function App() {
           />
           {/* 定义根路径 "/" 对应的组件为 Home */}
           <Route
-            path="/About"
-            element={<About account={account} setAccount={setAccount} />}
+            path="/Kokoworld"
+            element={<Kokoworld account={account} setAccount={setAccount} />}
           />
         </Routes>
       </Router>

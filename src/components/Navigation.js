@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const Navigation = ({ account, setAccount }) => {
   const navigate = useNavigate();
   const aboutOnclick = () => {
-    navigate("/About");
+    navigate("/Kokoworld");
   };
   const homeOnclick = () => {
     navigate("/");
@@ -31,7 +31,7 @@ const Navigation = ({ account, setAccount }) => {
       <ul className="nav__links">
         <li>
           <a href="#" onClick={aboutOnclick}>
-            About
+            kokoDAO
           </a>
         </li>
         <li>
