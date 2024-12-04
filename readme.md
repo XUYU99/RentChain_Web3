@@ -22,7 +22,7 @@ npx hardhat run scripts/deploy.js --network localhost
 
 1. **克隆项目**
 
-   首先将代码库克隆到本地：
+   新建终端（终端 1），首先将代码库克隆到本地：
 
    ```
    git clone git@github.com:Shuning0312/Web3_Rental_For_Trust.git
@@ -51,7 +51,7 @@ npx hardhat run scripts/deploy.js --network localhost
 
 5. **启动 Hardhat 本地节点**
 
-   打开一个新的终端窗口，启动 Hardhat 本地节点：
+   新建一个新的终端，启动 Hardhat 本地节点：
 
    ```
    yarn hardhat node
