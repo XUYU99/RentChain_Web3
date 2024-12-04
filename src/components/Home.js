@@ -45,36 +45,36 @@ function Home({ account, setAccount }) {
 
     // 定义一个数组来存储所有房产信息
     const properties = [];
-    const rentalPropertyAddress = [
-      "0xcf21E55e76daa50Dd804d97B176ee4aD19a31498",
-      "0x1C8f18633A476e132cF38f1aE33dC09d7a2B38d5",
-      "0xe291A8Fc5811d2f6980f43A60E8A8fA4C0dCD018",
-    ];
-    const rentalEscrowAddress = [
-      "0x107c8AE66Fd64D32BdE5d9BC8183b535B4A2b7CF",
-      "0x082e7D309Ea4115370361dC140c48736497AE5f3",
-      "0x38fA8F6FA4F3FC586B52deBf5Ab2B0c7DDEAF312",
-    ];
+    // const rentalPropertyAddress = [
+    //   "0xcf21E55e76daa50Dd804d97B176ee4aD19a31498",
+    //   "0x1C8f18633A476e132cF38f1aE33dC09d7a2B38d5",
+    //   "0xe291A8Fc5811d2f6980f43A60E8A8fA4C0dCD018",
+    // ];
+    // const rentalEscrowAddress = [
+    //   "0x107c8AE66Fd64D32BdE5d9BC8183b535B4A2b7CF",
+    //   "0x082e7D309Ea4115370361dC140c48736497AE5f3",
+    //   "0x38fA8F6FA4F3FC586B52deBf5Ab2B0c7DDEAF312",
+    // ];
     // 遍历加载房产信息
     for (let i = 0; i < 3; i++) {
       // 获取房产合约实例
-      const rentalProperty = new ethers.Contract(
-        rentalPropertyAddress[i],
-        RentalProperty.abi,
-        provider
-      );
+      // const rentalProperty = new ethers.Contract(
+      //   rentalPropertyAddress[i],
+      //   RentalProperty.abi,
+      //   provider
+      // );
 
-      // 获取租赁托管合约实例
-      const rentalEscrow = new ethers.Contract(
-        rentalEscrowAddress[i],
-        RentalEscrow.abi,
-        provider
-      );
-      console.log("111");
+      // // 获取租赁托管合约实例
+      // const rentalEscrow = new ethers.Contract(
+      //   rentalEscrowAddress[i],
+      //   RentalEscrow.abi,
+      //   provider
+      // );
+
       // 获取 房产和租赁托管 合约实例
-      // const rentalProperty = RentalPropertyArray[i];
+      const rentalProperty = RentalPropertyArray[i];
 
-      // const rentalEscrow = RentalEscrowArray[i];
+      const rentalEscrow = RentalEscrowArray[i];
       // 请求 URI 获取房产元数据
       const uri = await rentalProperty.tokenURI(tokenId);
       const response = await fetch(uri);
@@ -82,7 +82,6 @@ function Home({ account, setAccount }) {
       // 从 RentalEscrow 合约中获取房产租赁信息
 
       // propertyInfo -> [landlord, isAvailable, rentPrice, securityDeposit, tenant]
-      console.log("222");
       const [landlord, isAvailable, rentPrice, securityDeposit, tenant] =
         await rentalEscrow.getPropertyInfo(tokenId);
       // console.log("租客地址: ", tenant);
