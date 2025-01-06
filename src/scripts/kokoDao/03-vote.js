@@ -7,77 +7,85 @@ import {
   BoxContract,
   moveBlocks,
 } from "./01-deploy.js";
+import kokoToken from "../../artifacts/contracts/kokoDao/kokoToken.sol/kokoToken.json";
+import TimeLock from "../../artifacts/contracts/kokoDao/TimeLock.sol/TimeLock.json";
+import xytGovernor from "../../artifacts/contracts/kokoDao/xytGovernor.sol/xytGovernor.json";
+import Box from "../../artifacts/contracts/kokoDao/Box.sol/Box.json";
 // import { proposalId } from "./02-propose.js";
 import {
+  RPC_URL,
   PRIVATE_KEY0,
   PRIVATE_KEY1,
-  PRIVATE_KEY2,
-  PRIVATE_KEY3,
-  HARDHAT_RPC_URL,
 } from "../../components/accountSetting";
-
-// 定义投票日志
-export var voteLog = [];
-
-/**
- * 创建多个 signer 实例
- */
-function createSigner(rpcUrl, privateKey) {
-  const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
-  const signer = new ethers.Wallet(privateKey, provider);
-  return signer;
-}
 
 /**
  * 发送投票
- * @param {string} proposalidInput - 提案 ID
+ * @param {string} proposalIdInput - 提案 ID
  * @param {number} supportInput - 支持类型 (0: 反对, 1: 支持, 2: 弃权)
  * @param {number} accountNumberInput - 投票账户地址索引 (从 0 开始)
  */
-async function vote(proposalidInput, supportInput, accountNumberInput) {
-  // 所有私钥数组
-  const privateKeys = [PRIVATE_KEY0, PRIVATE_KEY1, PRIVATE_KEY2, PRIVATE_KEY3];
-
-  // 创建 signer 数组
-  const signers = privateKeys.map((key) => createSigner(HARDHAT_RPC_URL, key));
-  const signerAddresses = signers.map((signer) => signer.address);
-
+async function vote(
+  xytGovernorAddress,
+  proposalIdInput,
+  supportInput,
+  accountNumberInput
+) {
   console.log("开始投票...");
+  await window.ethereum.request({ method: "eth_requestAccounts" });
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  // const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+  // const signer = new ethers.Wallet(PRIVATE_KEY0, provider);
+  const account2 = new ethers.Wallet(PRIVATE_KEY1, provider);
+  const signerAddress = signer.getAddress();
+  const account2Address = account2.address;
+  // 获取 治理合约实例
+  const xytGovernorContract = new ethers.Contract(
+    xytGovernorAddress,
+    xytGovernor.abi,
+    provider
+  );
 
-  // 验证账户索引是否有效
-  if (accountNumberInput < 0 || accountNumberInput >= signers.length) {
-    throw new Error("Invalid accountNumberInput, out of range!");
-  }
-
-  const selectedSigner = signers[accountNumberInput]; // 根据索引选择对应签名者
-  const voteReason = `VOTE_REASON${accountNumberInput + 1}`; // 生成投票理由
+  console.log(`--------------03-vote----------------`);
 
   // 获取投票前提案状态: 0 Pending,1 Active,2 Canceled,3 Defeated,4 Succeeded,5 Queued,6 Expired,Executed
-
-  let proposalState = await xytGovernorContract.state(proposalidInput);
+  let proposalState = await xytGovernorContract.state(proposalIdInput);
   console.log("投票前提案状态: ", proposalState);
-
-  // 执行投票
-  const voteWight = await xytGovernorContract
-    .connect(selectedSigner)
-    .castVoteWithReason(proposalidInput, supportInput, voteReason);
-  await voteWight.wait(1);
-
-  // 记录投票日志
-  const timestamp = new Date().toISOString();
-  const voteArray = {
-    timestamp,
-    proposalId: proposalidInput,
-    support: supportInput,
-    voteReason,
-  };
-  voteLog.push(voteArray);
+  // 投票前，用户必须拥有koko币，同时授权币用于投票
+  // 第一个人投票
+  let voteWight;
+  if (accountNumberInput == 0) {
+    voteWight = await xytGovernorContract
+      .connect(signer)
+      .castVote(proposalIdInput, supportInput);
+  } else if (accountNumberInput == 1) {
+    voteWight = await xytGovernorContract
+      .connect(account2)
+      .castVote(proposalIdInput, supportInput);
+  }
+  await voteWight.wait();
+  const hasVoted01 = await xytGovernorContract.hasVoted(
+    proposalIdInput,
+    signerAddress
+  );
+  console.log("投票是否成功：", hasVoted01);
   // await moveBlocks(3);
 
   // 获取投票后提案状态
-  proposalState = await xytGovernorContract.state(proposalidInput);
+  proposalState = await xytGovernorContract.state(proposalIdInput);
   console.log(`投票完成后提案状态: ${proposalState}`);
+
+  const proposalVotes = await xytGovernorContract.proposalVotes(
+    proposalIdInput
+  );
+  const abstain = proposalVotes.abstainVotes;
+  const against = proposalVotes.againstVotes;
+  const forvote = proposalVotes.forVotes;
+  console.log("0 proposal abstain vote status: ", abstain.toString());
+  console.log("1 proposal against vote status: ", against.toString());
+  console.log("2 proposal forvote status: ", forvote.toString());
   console.log("---------------- 投票完成 ---------------");
+  return true;
 }
 
 export default vote;

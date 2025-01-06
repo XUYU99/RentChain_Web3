@@ -58,7 +58,7 @@ abstract contract Governor is
         bytes32((2 ** (uint8(type(ProposalState).max) + 1)) - 1);
     string private _name;
 
-    mapping(uint256 proposalId => ProposalCore) private _proposals;
+    mapping(uint256 proposalId => ProposalCore) internal _proposals;
 
     // This queue keeps track of the governor operating on itself. Calls to functions protected by the {onlyGovernance}
     // modifier needs to be whitelisted in this queue. Whitelisting is set in {execute}, consumed by the
@@ -157,6 +157,7 @@ abstract contract Governor is
         uint256 proposalId
     ) public view virtual returns (ProposalState) {
         // We read the struct fields into the stack at once so Solidity emits a single SLOAD
+        console.log("Governor-state()-111");
         ProposalCore storage proposal = _proposals[proposalId];
         bool proposalExecuted = proposal.executed;
         bool proposalCanceled = proposal.canceled;
@@ -198,7 +199,7 @@ abstract contract Governor is
      * @dev See {IGovernor-proposalThreshold}.
      */
     function proposalThreshold() public view virtual returns (uint256) {
-        return 0;
+        return 1;
     }
 
     /**
@@ -352,8 +353,6 @@ abstract contract Governor is
         string memory description,
         address proposer
     ) internal virtual returns (uint256 proposalId) {
-        // console.log("444");
-
         proposalId = hashProposal(
             targets,
             values,
@@ -936,8 +935,6 @@ abstract contract Governor is
         bytes32 allowedStates
     ) private view returns (ProposalState) {
         ProposalState currentState = state(proposalId);
-        // bytes32 statevalidete = _encodeStateBitmap(currentState) &
-        //     allowedStates;
         if (_encodeStateBitmap(currentState) & allowedStates == bytes32(0)) {
             revert GovernorUnexpectedProposalState(
                 proposalId,

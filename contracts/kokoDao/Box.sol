@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 // import "@openzeppelin/contracts/access/Ownable.sol";
-import "./access/Ownable.sol";
+import "../openzeppelin/access/Ownable.sol";
 import "hardhat/console.sol";
 
 // 导入OpenZeppelin的Ownable合约，用于访问控制

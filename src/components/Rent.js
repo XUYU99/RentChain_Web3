@@ -5,10 +5,6 @@ import {
   PRIVATE_KEY1,
   PRIVATE_KEY2,
   HARDHAT_RPC_URL,
-  SEPOLIA_PRIVATE_KEY0,
-  SEPOLIA_PRIVATE_KEY1,
-  SEPOLIA_PRIVATE_KEY2,
-  SEPOLIA_RPC_URL,
 } from "../components/accountSetting";
 async function Rent({
   property,

@@ -92,6 +92,7 @@ abstract contract ERC20 is Context, IERC20, IERC20Metadata, IERC20Errors {
      * @dev See {IERC20-balanceOf}.
      */
     function balanceOf(address account) public view virtual returns (uint256) {
+        console.log("ERC20_balanceOf()-account", account);
         console.log("ERC20_balanceOf()_111", _balances[account]);
         return _balances[account];
     }
@@ -106,7 +107,17 @@ abstract contract ERC20 is Context, IERC20, IERC20Metadata, IERC20Errors {
      */
     function transfer(address to, uint256 value) public virtual returns (bool) {
         address owner = _msgSender();
+        console.log("ERC20-transfer()-111");
+        console.log("ERC20-transfer()-address(this)", address(this));
+        console.log("ERC20-transfer()-from:", owner);
+        console.log("ERC20-transfer()-to:", to);
+        console.log("ERC20-transfer()-value:", value);
+        console.log("ERC20-transfer()-fromBalance", _balances[owner]);
+        console.log("ERC20-transfer()-toBalance", _balances[to]);
         _transfer(owner, to, value);
+        console.log("ERC20-transfer()-222");
+        console.log("ERC20-transfer()-fromBalance:", balanceOf(owner));
+        console.log("ERC20-transfer()-toBalance:", balanceOf(to));
         return true;
     }
 
@@ -134,8 +145,20 @@ abstract contract ERC20 is Context, IERC20, IERC20Metadata, IERC20Errors {
         address spender,
         uint256 value
     ) public virtual returns (bool) {
+        console.log("ERC20-approve()-msg.sender", _msgSender());
+        console.log("ERC20-approve()-spender", spender);
+        console.log("ERC20-approve()-value", value);
+
         address owner = _msgSender();
+        console.log(
+            "ERC20-approve()-_allowance-111:",
+            allowance(owner, spender)
+        );
         _approve(owner, spender, value);
+        console.log(
+            "ERC20-approve()-allowance-222:",
+            allowance(owner, spender)
+        );
         return true;
     }
 
@@ -183,6 +206,7 @@ abstract contract ERC20 is Context, IERC20, IERC20Metadata, IERC20Errors {
         if (to == address(0)) {
             revert ERC20InvalidReceiver(address(0));
         }
+        console.log("ERC20-_transfer()-111");
         _update(from, to, value);
     }
 
@@ -194,15 +218,25 @@ abstract contract ERC20 is Context, IERC20, IERC20Metadata, IERC20Errors {
      * Emits a {Transfer} event.
      */
     function _update(address from, address to, uint256 value) internal virtual {
+        console.log("ERC20-_update()-111");
+        console.log("ERC20-_update()-from", from);
+        console.log("ERC20-_update()-to", to);
+        console.log("ERC20-_update()-value:", value);
+        console.log("ERC20-_update()-fromBalance", _balances[from]);
+        console.log("ERC20-_update()-toBalance", _balances[to]);
         if (from == address(0)) {
+            console.log("ERC20-_update()-222");
             // Overflow check required: The rest of the code assumes that totalSupply never overflows
             _totalSupply += value;
         } else {
+            console.log("ERC20-_update()-333");
             uint256 fromBalance = _balances[from];
             if (fromBalance < value) {
+                console.log("ERC20-_update()-444");
                 revert ERC20InsufficientBalance(from, fromBalance, value);
             }
             unchecked {
+                console.log("ERC20-_update()-555");
                 // Overflow not possible: value <= fromBalance <= totalSupply.
                 _balances[from] = fromBalance - value;
             }
@@ -210,16 +244,19 @@ abstract contract ERC20 is Context, IERC20, IERC20Metadata, IERC20Errors {
 
         if (to == address(0)) {
             unchecked {
+                console.log("ERC20-_update()-666");
                 // Overflow not possible: value <= totalSupply or value <= fromBalance <= totalSupply.
                 _totalSupply -= value;
             }
         } else {
             unchecked {
+                console.log("ERC20-_update()-777");
                 // Overflow not possible: balance + value is at most totalSupply, which we know fits into a uint256.
                 _balances[to] += value;
             }
         }
-
+        console.log("after-ERC20-_update()-fromBalance", _balances[from]);
+        console.log("after-ERC20-_update()-toBalance", _balances[to]);
         emit Transfer(from, to, value);
     }
 
@@ -303,6 +340,7 @@ abstract contract ERC20 is Context, IERC20, IERC20Metadata, IERC20Errors {
             revert ERC20InvalidSpender(address(0));
         }
         _allowances[owner][spender] = value;
+
         if (emitEvent) {
             emit Approval(owner, spender, value);
         }

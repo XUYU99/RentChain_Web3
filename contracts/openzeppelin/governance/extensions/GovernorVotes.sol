@@ -3,12 +3,12 @@
 
 pragma solidity ^0.8.20;
 
-import { Governor } from "../Governor.sol";
-import { IVotes } from "../utils/IVotes.sol";
-import { IERC5805 } from "../../interfaces/IERC5805.sol";
-import { IERC20 } from "../../interfaces/IERC20.sol";
-import { SafeCast } from "../../utils/math/SafeCast.sol";
-import { Time } from "../../utils/types/Time.sol";
+import {Governor} from "../Governor.sol";
+import {IVotes} from "../utils/IVotes.sol";
+import {IERC5805} from "../../interfaces/IERC5805.sol";
+import {IERC20} from "../../interfaces/IERC20.sol";
+import {SafeCast} from "../../utils/math/SafeCast.sol";
+import {Time} from "../../utils/types/Time.sol";
 import "hardhat/console.sol";
 
 /**
@@ -57,17 +57,27 @@ abstract contract GovernorVotes is Governor {
     /**
      * Read the voting weight from the token's built in snapshot mechanism (see {Governor-_getVotes}).
      */
+    // function _getVotes(
+    //     address account,
+    //     uint256 timepoint,
+    //     bytes memory /*params*/
+    // ) internal view virtual override returns (uint256) {
+    //     // uint256 pastVotes = IERC20(0x5FbDB2315678afecb367f032d93F642f64180aa3)
+    //     //     .balanceOf(account);
+    //     // console.log("GovernorVotes-_getVotes()-pastVotes:", pastVotes);
+    //     uint256 pastVotes = token().getPastVotes(account, timepoint);
+    //     // console.log("GovernorVotes-_getVotes()-pastVotes:", pastVotes);
+    //     return pastVotes;
+    //     // return token().getPastVotes(account, timepoint);
+    // }
+
+    // 获取特定时间点的授权koko余额，被我改成现有的koko余额
     function _getVotes(
         address account,
         uint256 timepoint,
         bytes memory /*params*/
     ) internal view virtual override returns (uint256) {
-        // uint256 pastVotes = IERC20(0x5FbDB2315678afecb367f032d93F642f64180aa3)
-        //     .balanceOf(account);
-        // console.log("GovernorVotes-_getVotes()-pastVotes:", pastVotes);
-        uint256 pastVotes = token().getPastVotes(account, timepoint);
-        // console.log("GovernorVotes-_getVotes()-pastVotes:", pastVotes);
-        return pastVotes;
         // return token().getPastVotes(account, timepoint);
+        return token().getVotes(account);
     }
 }

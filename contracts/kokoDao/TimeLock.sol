@@ -2,7 +2,7 @@
 pragma solidity ^0.8.20;
 
 // import "@openzeppelin/contracts/governance/TimelockController.sol";
-import "./governance/TimelockController.sol";
+import "../openzeppelin/governance/TimelockController.sol";
 
 contract TimeLock is TimelockController {
     /**

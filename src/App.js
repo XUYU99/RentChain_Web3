@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 
 // Components
-import Navigation from "./components/Navigation";
-import About from "./components/About";
+
 import Home from "./components/Home";
-import Kokoworld from "./components/01-kokoWorld";
+import Kokoworld from "./components/kokoDao/01-kokoWorld";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 function App() {
   const [account, setAccount] = useState(null);

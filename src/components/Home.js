@@ -20,10 +20,6 @@ import {
   PRIVATE_KEY1,
   PRIVATE_KEY2,
   RPC_URL,
-  SEPOLIA_PRIVATE_KEY0,
-  SEPOLIA_PRIVATE_KEY1,
-  SEPOLIA_PRIVATE_KEY2,
-  SEPOLIA_RPC_URL,
 } from "../components/accountSetting";
 function Home({ account, setAccount }) {
   const [provider, setProvider] = useState(null);
@@ -34,7 +30,7 @@ function Home({ account, setAccount }) {
   async function deployOnclick() {
     await deploy(); // 调用部署函数
     // 刷新页面信息
-    // loadBlockchainData();
+    await loadBlockchainDataOnclick();
   }
 
   const loadBlockchainData = async () => {
@@ -141,7 +137,7 @@ function Home({ account, setAccount }) {
   };
 
   // 点击按钮时手动调用加载区块链数据函数
-  function loadBlockchainDataOnclick() {
+  async function loadBlockchainDataOnclick() {
     loadBlockchainData(); // 调用主加载函数
   }
 
@@ -153,7 +149,7 @@ function Home({ account, setAccount }) {
       <div className="cards__section">
         <h3>
           <button onClick={deployOnclick}>deploy</button>{" "}
-          <button onClick={loadBlockchainDataOnclick}>reflesh</button>{" "}
+          {/* <button onClick={loadBlockchainDataOnclick}>reflesh</button>{" "} */}
           Properties For Rent
         </h3>
         <hr />

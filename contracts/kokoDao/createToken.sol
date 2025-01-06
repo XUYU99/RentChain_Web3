@@ -11,7 +11,7 @@ import {Nonces} from "../openzeppelin/utils/Nonces.sol";
 
 import "hardhat/console.sol";
 
-contract kokoToken is
+contract createToken is
     ERC20,
     ERC20Burnable,
     AccessControl,
@@ -21,9 +21,11 @@ contract kokoToken is
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     constructor(
+        string memory _name,
+        string memory _symbol,
         address defaultAdmin,
         address minter
-    ) ERC20("kokoToken", "KO") ERC20Permit("kokoToken") {
+    ) ERC20(_name, _symbol) ERC20Permit(_name) {
         console.log("kokoToken-constructor()-msg.sender", msg.sender);
         console.log("kokoToken-constructor()-address(this)", address(this));
         _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);
@@ -60,5 +62,14 @@ contract kokoToken is
         address owner
     ) public view override(ERC20Permit, Nonces) returns (uint256) {
         return super.nonces(owner);
+    }
+
+    function transfer(
+        address to,
+        uint256 value
+    ) public virtual override returns (bool) {
+        console.log("kokoToken-transfer()-111");
+        console.log("kokoToken-transfer()-address(this)", address(this));
+        return super.transfer(to, value);
     }
 }

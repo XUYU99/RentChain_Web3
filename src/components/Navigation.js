@@ -31,7 +31,7 @@ const Navigation = ({ account, setAccount }) => {
       <ul className="nav__links">
         <li>
           <a href="#" onClick={aboutOnclick}>
-            kokoDAO
+            DAO
           </a>
         </li>
         <li>
