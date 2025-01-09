@@ -1,15 +1,18 @@
 {
   "files": {
-    "main.css": "/XUYU99/Web3_Rental_For_Trust-3/static/css/main.0e8796f2.css",
-    "main.js": "/XUYU99/Web3_Rental_For_Trust-3/static/js/main.c1f4bf5c.js",
-    "static/js/453.ad2c5927.chunk.js": "/XUYU99/Web3_Rental_For_Trust-3/static/js/453.ad2c5927.chunk.js",
-    "index.html": "/XUYU99/Web3_Rental_For_Trust-3/index.html",
-    "main.0e8796f2.css.map": "/XUYU99/Web3_Rental_For_Trust-3/static/css/main.0e8796f2.css.map",
-    "main.c1f4bf5c.js.map": "/XUYU99/Web3_Rental_For_Trust-3/static/js/main.c1f4bf5c.js.map",
-    "453.ad2c5927.chunk.js.map": "/XUYU99/Web3_Rental_For_Trust-3/static/js/453.ad2c5927.chunk.js.map"
+    "main.css": "./static/css/main.cf92dc06.css",
+    "main.js": "./static/js/main.dd8be856.js",
+    "static/js/787.cd623499.chunk.js": "./static/js/787.cd623499.chunk.js",
+    "static/media/houses.png": "./static/media/houses.e208272372ec25794e19.png",
+    "static/media/RentChainLogo.png": "./static/media/RentChainLogo.9acd8e4e9f8af48deee6.png",
+    "index.html": "./index.html",
+    "static/media/close.svg": "./static/media/close.ae469738e479d31aa952364e12120ad2.svg",
+    "main.cf92dc06.css.map": "./static/css/main.cf92dc06.css.map",
+    "main.dd8be856.js.map": "./static/js/main.dd8be856.js.map",
+    "787.cd623499.chunk.js.map": "./static/js/787.cd623499.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.0e8796f2.css",
-    "static/js/main.c1f4bf5c.js"
+    "static/css/main.cf92dc06.css",
+    "static/js/main.dd8be856.js"
   ]
 }
