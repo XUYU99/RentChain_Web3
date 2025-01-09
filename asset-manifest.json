@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/RentChain_Web3/static/css/main.f8273363.css",
-    "main.js": "/RentChain_Web3/static/js/main.e0ab3313.js",
-    "static/js/787.cd623499.chunk.js": "/RentChain_Web3/static/js/787.cd623499.chunk.js",
-    "static/media/houses.png": "/RentChain_Web3/static/media/houses.e208272372ec25794e19.png",
-    "static/media/RentChainLogo.png": "/RentChain_Web3/static/media/RentChainLogo.9acd8e4e9f8af48deee6.png",
-    "index.html": "/RentChain_Web3/index.html",
-    "static/media/close.svg": "/RentChain_Web3/static/media/close.ae469738e479d31aa952364e12120ad2.svg",
-    "main.f8273363.css.map": "/RentChain_Web3/static/css/main.f8273363.css.map",
-    "main.e0ab3313.js.map": "/RentChain_Web3/static/js/main.e0ab3313.js.map",
-    "787.cd623499.chunk.js.map": "/RentChain_Web3/static/js/787.cd623499.chunk.js.map"
+    "main.css": "/RentChain_Web3/Home/static/css/main.95114a1f.css",
+    "main.js": "/RentChain_Web3/Home/static/js/main.6d901aa0.js",
+    "static/js/787.cd623499.chunk.js": "/RentChain_Web3/Home/static/js/787.cd623499.chunk.js",
+    "static/media/houses.png": "/RentChain_Web3/Home/static/media/houses.e208272372ec25794e19.png",
+    "static/media/RentChainLogo.png": "/RentChain_Web3/Home/static/media/RentChainLogo.9acd8e4e9f8af48deee6.png",
+    "index.html": "/RentChain_Web3/Home/index.html",
+    "static/media/close.svg": "/RentChain_Web3/Home/static/media/close.ae469738e479d31aa952364e12120ad2.svg",
+    "main.95114a1f.css.map": "/RentChain_Web3/Home/static/css/main.95114a1f.css.map",
+    "main.6d901aa0.js.map": "/RentChain_Web3/Home/static/js/main.6d901aa0.js.map",
+    "787.cd623499.chunk.js.map": "/RentChain_Web3/Home/static/js/787.cd623499.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f8273363.css",
-    "static/js/main.e0ab3313.js"
+    "static/css/main.95114a1f.css",
+    "static/js/main.6d901aa0.js"
   ]
 }
