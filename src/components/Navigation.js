@@ -1,14 +1,17 @@
 import { ethers } from "ethers";
-import logo from "../assets/logo.svg";
+import logo from "../assets/RentChainLogo.png";
 import { useNavigate } from "react-router-dom";
 
 const Navigation = ({ account, setAccount }) => {
   const navigate = useNavigate();
   const aboutOnclick = () => {
-    navigate("/About");
+    navigate("/Kokoworld");
   };
   const homeOnclick = () => {
-    navigate("/");
+    navigate("/Home");
+  };
+  const myOrdersOnclick = () => {
+    navigate("/MyOrders");
   };
   const connectOnclick = async () => {
     // 检查窗口对象是否包含 ethereum 对象（MetaMask 注入的对象）
@@ -30,12 +33,12 @@ const Navigation = ({ account, setAccount }) => {
     <nav>
       <ul className="nav__links">
         <li>
-          <a href="#" onClick={aboutOnclick}>
-            About
+          <a href="DAO" onClick={aboutOnclick}>
+            DAO
           </a>
         </li>
         <li>
-          <a href="#" onClick={homeOnclick}>
+          <a href="Home" onClick={homeOnclick}>
             Home
           </a>
         </li>
@@ -45,13 +48,18 @@ const Navigation = ({ account, setAccount }) => {
       </ul>
 
       <div className="nav__brand">
-        <img src={logo} alt="Logo" />
+        {/* <img src={logo} alt="Logo" /> */}
+        <div className="nav__logo"> </div>
         <h1>RentChain</h1> {/* 更改为您的项目名称 */}
       </div>
       <div className="nav_address">
         {account ? (
           <div className="nav__account">
-            <button type="button" className="nav__connect">
+            <button
+              type="button"
+              className="nav__connect"
+              onClick={myOrdersOnclick}
+            >
               {account.slice(0, 6) + "..." + account.slice(38, 42)}
             </button>
           </div>
@@ -64,6 +72,7 @@ const Navigation = ({ account, setAccount }) => {
             Connect Wallet
           </button>
         )}
+        {/* <button onClick={myOrdersOnclick}>myOrders</button> */}
       </div>
     </nav>
   );

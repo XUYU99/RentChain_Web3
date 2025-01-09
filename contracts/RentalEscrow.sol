@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+import "hardhat/console.sol";
 
 interface IRentalProperty {
     function getPropertyInfo(
@@ -22,11 +23,13 @@ contract RentalEscrow {
 
     // 租赁信息结构
     struct Rental {
+        address landlord; // 房东地址
+        bool isAvailable; // 是否可租
+        uint256 rentPrice; // 月租金
+        uint256 securityDeposit; // 押金
         address tenant; // 租客地址
         uint256 startTime; // 租期开始时间
         uint256 endTime; // 租期结束时间
-        uint256 rentAmount; // 月租金
-        uint256 securityDeposit; // 押金
         bool active; // 是否处于激活状态
         bool depositReturned; // 押金是否已退还
     }
@@ -61,33 +64,11 @@ contract RentalEscrow {
     }
 
     // 获取房产信息
-    function getPropertyInfo(
-        uint256 _nftID
-    )
-        public
-        view
-        returns (
-            address landlord,
-            bool isAvailable,
-            uint256 rentPrice,
-            uint256 securityDeposit,
-            address tenant
-        )
-    {
-        (
-            landlord, // 房东地址
-            isAvailable, // 是否可租
-            rentPrice, // 月租金
-            securityDeposit // 押金
-        ) = rentalProperty.getPropertyInfo(_nftID);
-        tenant = rentals[_nftID].tenant;
-        // tenant = 0x0000000000000000000000000000000000001234;
-        // // 如果租客地址为空，设置为默认地址
-        // if (tenant == address(0)) {
-        //     tenant = 0x0000000000000000000000000000000000000000; // 默认地址
-        // }
-
-        return (landlord, isAvailable, rentPrice, securityDeposit, tenant);
+    function getRentalEscrowInfo(
+        uint256 _tokenId
+    ) public view returns (Rental memory rental) {
+        rental = rentals[_tokenId];
+        return rental;
     }
 
     // 创建租赁合约
@@ -98,25 +79,33 @@ contract RentalEscrow {
             uint256 rentPrice,
             uint256 securityDeposit
         ) = rentalProperty.getPropertyInfo(tokenId);
-        require(isAvailable, "Property not available");
-        // require(
-        //     msg.value >= rentPrice + securityDeposit,
-        //     "Insufficient payment"
-        // );
 
+        // 验证房产是否可租
+        require(isAvailable, "Property not available");
+
+        // 验证支付的金额是否足够
+        uint256 requiredAmount = rentPrice + securityDeposit;
+        require(msg.value >= requiredAmount, "Insufficient payment");
+
+        // 设置租赁开始和结束时间
         uint256 startTime = block.timestamp;
         uint256 endTime = startTime + (duration * 30 days);
 
-        rentals[tokenId] = Rental({
-            tenant: msg.sender,
-            startTime: startTime,
-            endTime: endTime,
-            rentAmount: rentPrice,
-            securityDeposit: securityDeposit,
-            active: true,
-            depositReturned: false
-        });
+        // 获取或创建租赁信息
+        Rental storage rental = rentals[tokenId];
 
+        // 初始化租赁信息
+        rental.landlord = landlord; // 房东地址
+        rental.isAvailable = false; // 设置为不可租状态
+        rental.rentPrice = rentPrice; // 月租金
+        rental.securityDeposit = securityDeposit; // 押金
+        rental.tenant = msg.sender; // 租客地址
+        rental.startTime = startTime; // 租赁开始时间
+        rental.endTime = endTime; // 租赁结束时间
+        rental.active = true; // 设置为激活状态
+        rental.depositReturned = false; // 押金未退还
+
+        // 记录租客的租赁信息
         tenantRentals[msg.sender].push(tokenId);
 
         // 更新租赁状态
@@ -135,7 +124,7 @@ contract RentalEscrow {
         Rental storage rental = rentals[tokenId];
         require(rental.active, "Rental not active");
         require(msg.sender == rental.tenant, "Not the tenant");
-        require(msg.value >= rental.rentAmount, "Insufficient rent payment");
+        require(msg.value >= rental.rentPrice, "Insufficient rent payment");
 
         (address landlord, , , ) = rentalProperty.getPropertyInfo(tokenId);
         payable(landlord).transfer(msg.value);

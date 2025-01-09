@@ -5,10 +5,6 @@ import {
   PRIVATE_KEY1,
   PRIVATE_KEY2,
   HARDHAT_RPC_URL,
-  SEPOLIA_PRIVATE_KEY0,
-  SEPOLIA_PRIVATE_KEY1,
-  SEPOLIA_PRIVATE_KEY2,
-  SEPOLIA_RPC_URL,
 } from "../components/accountSetting";
 async function Rent({
   property,
@@ -38,14 +34,14 @@ async function Rent({
     // const landlord1 = new ethers.Wallet(SEPOLIA_PRIVATE_KEY1, provider);
     // const tenant1 = new ethers.Wallet(SEPOLIA_PRIVATE_KEY2, provider);
     // 从 RentalEscrow 合约中获取房产租赁信息 propertyInfo -> [landlord, isAvailable, rentPrice, securityDeposit, tenant]
-    const propertyInfo = await rentalEscrow.getPropertyInfo(tokenId);
+    const rental = await rentalEscrow.getRentalEscrowInfo(tokenId);
     // 获取租金和押金信息
-    const rentPrice = propertyInfo[2];
-    const securityDeposit = propertyInfo[3];
+    const rentPrice = rental.rentPrice;
+    const securityDeposit = rental.securityDeposit;
     const totalAmount = rentPrice.add(securityDeposit);
 
     // 获取房东地址的余额
-    const landlordAddress = propertyInfo[0];
+    const landlordAddress = rental.landlord.toString();
     let landlordBalance = await provider.getBalance(landlordAddress);
     let landlordBalanceInEth = ethers.utils.formatEther(landlordBalance);
     console.log("房东余额: ", landlordBalanceInEth, "ETH");

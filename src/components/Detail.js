@@ -35,13 +35,14 @@ const Detail = ({ property, togglePop, loadBlockchainData, tokenId }) => {
 
       // console.log("property: ", property);
       // 获取租客地址和租赁状态
-      const [landlord, isAvailable, rentPrice, securityDeposit, tenant] =
-        await rentalEscrow.getPropertyInfo(tokenId);
-      console.log("当前房屋获取租客地址为：", tenant);
-      if (tenant !== "0x0000000000000000000000000000000000000000") {
+      // const [landlord, isAvailable, rentPrice, securityDeposit, tenant] =
+      const rental = await rentalEscrow.getRentalEscrowInfo(tokenId);
+
+      console.log("当前房屋rental为：", rental.tenant);
+      if (rental.tenant !== "0x0000000000000000000000000000000000000000") {
         setIsRented(true); // 或者设置为其他默认地址
       }
-      setCurrentTenant(tenant);
+      setCurrentTenant(rental.tenant);
     } catch (error) {
       console.error("Error fetching details:", error);
       setError("Error fetching property details");
@@ -71,7 +72,7 @@ const Detail = ({ property, togglePop, loadBlockchainData, tokenId }) => {
         const tenant1 = provider.getSigner();
         setrentLoading(true); // 开始处理时显示弹窗
         // 从 RentalEscrow 合约中获取房产租赁信息 propertyInfo -> [landlord, isAvailable, rentPrice, securityDeposit, tenant]
-        const propertyInfo = await rentalEscrow.getPropertyInfo(tokenId);
+        const propertyInfo = await rentalProperty.getPropertyInfo(tokenId);
         // 获取租金和押金信息
         const rentPrice = propertyInfo[2];
         const securityDeposit = propertyInfo[3];
@@ -113,8 +114,8 @@ const Detail = ({ property, togglePop, loadBlockchainData, tokenId }) => {
           landlordBalanceInEth = ethers.utils.formatEther(landlordBalance);
           console.log("租房后，房东余额: ", landlordBalanceInEth, "ETH");
 
-          const [, , , , tenant] = await rentalEscrow.getPropertyInfo(tokenId);
-          setCurrentTenant(tenant);
+          const rental = await rentalEscrow.getRentalEscrowInfo(tokenId);
+          setCurrentTenant(rental.tenant);
           console.log("租房后，当前房屋租客地址为：", currentTenant);
         }
         await loadBlockchainData();
@@ -140,103 +141,112 @@ const Detail = ({ property, togglePop, loadBlockchainData, tokenId }) => {
   }, []);
 
   return (
-    <div className="home">
-      <div className="home__details">
-        {rentLoading && (
-          <div className="loading-overlay">
-            <div className="loading-spinner">正在处理中...</div>
+    <div className="home_details">
+      {rentLoading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner">
+            Processing, please wait a moment...
           </div>
-        )}
-        {/* 租房成功的弹窗 */}
-        {rentSuccess && (
-          <div className="loading-overlay">
-            <div className="loading-spinner">
-              <div className="loading-successmessage">
-                <h2>租房已完成</h2>
-                <p>
-                  已扣除房租
-                  <strong> {property.rentPrice} ETH </strong>
-                  和押金<strong> {property.securityDeposit} ETH</strong>
-                  ，租期为<strong> 1 个月 </strong>
-                  <br />
-                </p>
-                <p>
-                  租客地址为：{currentTenant} <br />
-                </p>
-                <p>房东地址为：{property.landlord}</p>
-                <br />
-                请核对信息，并点击确认
-              </div>
-              <div className="loading-successmessage-button">
-                <button
-                  type="button"
-                  className="successmessage-button"
-                  onClick={successMessageOnclick}
-                >
-                  确认
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div className="home__image">
-          <img src={property.image} alt="Home" />
         </div>
-        <div className="home__overview">
-          <h1>{property.name}</h1>
-          <p>
-            <strong>{property.attributes[6].value}</strong> bds |
-            <strong>{property.attributes[7].value}</strong> ba |
-            <strong>{property.attributes[4].value}</strong> sqft
-          </p>
-          <p>
-            <a
-              href={`https://sepolia.etherscan.io/address/${property.rentalPropertyAddress}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {property.rentalPropertyAddress}
-            </a>
-          </p>
-          <h2>{property.attributes[0].value} ETH</h2>
-
-          {isRented ? (
-            <div>
-              <div className="home__owned">rented</div>
-              <div>tenant:{currentTenant}</div>
+      )}
+      {/* 租房成功的弹窗 */}
+      {rentSuccess && (
+        <div className="loading-overlay">
+          <div className="loading-spinner">
+            <div className="loading-successmessage">
+              <h2>Rental Completed</h2> <br />
+              <p>
+                <strong>{property.rentPrice} ETH</strong> has been deducted as
+                rent for a lease period of <strong>1 month</strong>.
+              </p>
+              <p>
+                Additionally, a security deposit of{" "}
+                <strong>{property.securityDeposit} ETH</strong> has been
+                deducted.
+              </p>
+              <br />
+              <p>
+                <strong> Tenant address:&nbsp;&nbsp; </strong> {currentTenant}{" "}
+                <br />
+              </p>
+              <p>
+                <strong> Landlord address:&nbsp;&nbsp; </strong>{" "}
+                {property.landlord}
+              </p>
+              <br />
+              Please verify the information and click confirm.
             </div>
-          ) : (
-            <div>
-              <button className="home__contact" onClick={rentOnclick}>
-                Rent
+            <div className="loading-successmessage-button">
+              <button
+                type="button"
+                className="successmessage-button"
+                onClick={successMessageOnclick}
+              >
+                Confirm
               </button>
             </div>
-          )}
-
-          <hr />
-
-          <h2>Overview</h2>
-
-          <p>{property.description}</p>
-
-          <hr />
-
-          <h2>Facts and features</h2>
-
-          <ul>
-            {property.attributes.map((attribute, index) => (
-              <li key={index}>
-                <strong>{attribute.trait_type}</strong> : {attribute.value}
-              </li>
-            ))}
-          </ul>
+          </div>
         </div>
+      )}
 
-        <button onClick={togglePop} className="home__close">
-          <img src={close} alt="Close" />
-        </button>
+      <div className="home_details_image">
+        <img src={property.image} alt="Home" />
       </div>
+      <div className="home_details_overview">
+        <h2>{property.name}</h2>
+        <p>
+          <strong>{property.attributes[6].value}</strong> bds |
+          <strong>{property.attributes[7].value}</strong> ba |
+          <strong>{property.attributes[4].value}</strong> sqft
+        </p>
+        <p>
+          <a
+            href={`https://sepolia.etherscan.io/address/${property.rentalPropertyAddress}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {property.rentalPropertyAddress}
+          </a>
+        </p>
+        <h3>{property.attributes[0].value} ETH</h3>
+
+        {isRented ? (
+          <div>
+            <div className="home_details_rented">rented</div>
+            <div className="home_details_rented_tenant">
+              Tenant: {currentTenant}
+            </div>
+          </div>
+        ) : (
+          <div>
+            <button className="home_details_rent" onClick={rentOnclick}>
+              Rent
+            </button>
+          </div>
+        )}
+
+        <hr />
+
+        <h3>Overview</h3>
+
+        <p>{property.description}</p>
+
+        <hr />
+
+        <h3>Facts and features</h3>
+
+        <ul>
+          {property.attributes.map((attribute, index) => (
+            <li key={index}>
+              <strong>{attribute.trait_type}</strong> : {attribute.value}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <button onClick={togglePop} className="home_details_close">
+        <img src={close} alt="Close" />
+      </button>
     </div>
   );
 };
