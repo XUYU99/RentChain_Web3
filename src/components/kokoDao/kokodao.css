@@ -1,32 +1,16 @@
 /* @import url("https://fontsogleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"); */
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap");
-:root {
-  --clr-white: #ffffff;
-  --clr-black: #202020;
-  --clr-grey: #7a7979;
-  --clr-blue: #6c63ff;
-  --clr-blue-2: #4c46b6;
-  --clr-pink: #d6517d;
-  --clr-pink-2: #b4345f;
-  --clr-black: #000000;
-}
-/* .index {
-  text-align: center;
-  font-family: "Press Start 2P", "VT323";
-  color: white;
-  z-index: 1;
-} */
+
 .overlay {
   text-align: center;
   /* font-family: "Press Start 2P", "VT323"; */
   font-family: "Open Sans";
-  font-weight: 700;
+  /* font-weight: 700; */
   color: rgb(51, 48, 48);
   z-index: 2;
   /* opacity: 0.85; */
   width: 100%;
   height: 100%;
-  z-index: 1;
   top: 0;
   left: 0;
   position: fixed;
@@ -69,10 +53,14 @@
 }
 .kokoDao_operate {
   flex-direction: column; /* 子元素垂直排列 */
-  padding: 50px 10px;
+  padding: 60px 10px;
 }
 .DAO_title {
   margin-bottom: 30px;
+  font-size: 30px;
+  font-weight: 700;
+  color: #333;
+  text-shadow: 4px 4px 5px rgba(126, 124, 124, 0.518); /* 字体阴影 */
 }
 .kokoDao_operate input {
   color: #000000;
@@ -80,6 +68,7 @@
   width: 180px;
   height: 30px;
   font-size: 13px;
+  font-weight: 600;
   text-align: center;
   padding: 5px;
   margin: 10px;
@@ -88,15 +77,16 @@
 }
 
 .kokoDao_operate button {
-  background-color: #6b63ffb4;
+  height: 30px;
+  margin-bottom: 30px;
+  background-color: var(--clr-blue);
   border-radius: 5px;
-  box-sizing: 0px 2px 2px 1px var(--clr-black);
   color: white;
   cursor: pointer;
-  font-size: 13px;
-  padding: 10px;
-  margin-bottom: 30px;
-  margin: 10px;
+  font-size: 14px;
+  font-weight: 700;
+
+  padding: 0 15px;
 }
 .kokoDao_deploy,
 .kokoDao_propose,
@@ -140,66 +130,71 @@
 .proposal-card {
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  padding: 8px;
-  margin: 10px;
-  max-width: 330px;
-  background-color: #5c56d1d6;
+  padding: 15px;
+  margin: 20px;
+  max-width: 340px;
+  background-color: #c7c7d971;
 }
 /* 刷新和 moveBlock 按钮区域样式 */
 .refresh_moveblock {
+  height: 8vh;
   display: flex;
-  margin: 10px 0px;
+  margin: 10px;
   justify-content: center; /* 按钮居中对齐 */
   align-items: center; /* 垂直居中对齐 */
 }
 /* 刷新按钮样式 */
 .refresh-btn {
-  font-size: 14px;
-  margin: 10px;
+  height: 30px;
+  background-color: #74729975;
+  border-radius: 5px;
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  padding: 0px 15px;
 }
-/* 时间戳样式 */
+/* voteStart时间戳样式 */
 .proposal-timestamp {
-  font-size: 11px;
-  color: rgb(205, 205, 205);
+  font-size: 13px;
+  color: rgb(142, 141, 141);
 }
 
 /* 提案描述按钮样式 */
 .proposal-description-btn {
-  margin-top: 8px;
-  font-size: 17px;
+  font-size: 19px;
   white-space: normal;
   word-break: break-word;
   font-weight: bold; /* 设置字体加粗 */
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 添加阴影 */
 }
 
-.proposal-card h5 {
-  font-size: 10px;
-  margin-top: 5px;
-  color: rgb(246, 211, 211);
-}
 /* 提案 ID 样式 */
 .proposal-id {
-  font-size: 11px;
-  color: rgb(237, 237, 237);
+  font-size: 13px;
+  color: rgb(115, 115, 116);
   margin-top: 8px;
 }
 
 /* 提案时间状态样式 */
 .proposal-status {
-  font-size: 12px;
+  font-size: 14px;
   color: rgb(196, 195, 195);
   margin-top: 20px;
 }
 
 .proposal-status.poll-ended {
-  color: rgb(255, 161, 161);
+  color: rgb(197, 116, 116);
 }
 
 .proposal-status.poll-in-progress {
-  color: rgb(152, 173, 235);
+  color: rgb(139, 164, 237);
 }
-
+.proposal-endtime {
+  color: #7c7c7c;
+  font-size: 12px;
+  margin-top: 5px;
+}
 /* 进度条外层样式 */
 .progress-bar {
   position: relative;
@@ -210,24 +205,24 @@
   overflow: hidden;
   margin-top: 8px;
 }
-/* 支持进度条样式 */
+/* 支持 进度条 */
 .progress-bar-support {
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
-  background-color: #3182ce;
+  background-color: #4c7fdd;
 }
-/* 反对进度条样式 */
+/* 反对 进度条样式 */
 .progress-bar-oppose {
   position: absolute;
   top: 0;
   right: 0;
   height: 100%;
-  background-color: #e53e3e;
+  background-color: #e26546;
 }
 
-/* 弃权进度条样式 */
+/* 弃权 进度条样式 */
 .progress-bar-abstain {
   position: absolute;
   top: 0;
@@ -243,17 +238,33 @@
 }
 
 .support-statistics-text {
-  font-size: 11px;
-  color: #adbedf;
+  font-size: 13px;
+  color: #879fcf;
 }
 
 /* 交易哈希按钮样式 */
-.transaction-targets-btn {
-  margin-top: 12px;
-  font-size: 10px;
-  white-space: normal;
-  word-break: break-word;
+.transaction-targets {
+  font-size: 12px;
 }
+/* 默认链接样式 */
+.transaction-targets a {
+  text-decoration: none; /* 移除下划线 */
+  color: #2a5c91e3; /* 设置链接的默认颜色 */
+  font-weight: 700; /* 加粗字体 */
+  transition: color 0.3s ease; /* 添加颜色变化的过渡效果 */
+}
+
+/* 鼠标悬停时的样式 */
+.transaction-targets a:hover {
+  color: #1c446f; /* 鼠标悬停时改变颜色 */
+  text-decoration: underline; /* 鼠标悬停时显示下划线 */
+}
+
+/* 已访问链接样式 */
+.transaction-targets a:visited {
+  color: #6c757d; /* 已访问链接显示为灰色 */
+}
+
 /* 响应式布局：当屏幕宽度小于768px时调整布局 */
 @media (max-width: 768px) {
   /* 容器 */
@@ -341,7 +352,7 @@
     width: 150px;
     height: 50px;
     margin: 20px;
-    background-color: var(--clr-pink);
+    background-color: var(--clr-blue);
     color: var(--clr-white);
     border: none;
     border-radius: 5px; /* 更圆润的边角 */
@@ -350,7 +361,7 @@
   }
 
   .successmessage-button:hover {
-    background-color: var(--clr-pink-2); /* 按钮悬停效果 */
+    background-color: var(--clr-blue-2); /* 按钮悬停效果 */
   }
 
   .successmessage-button:active {

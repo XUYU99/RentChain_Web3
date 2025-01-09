@@ -5,6 +5,7 @@ import { ethers } from "ethers";
 import Navigation from "../components/Navigation";
 import Search from "../components/Search";
 import Detail from "../components/Detail";
+import AddProperty from "../components/AddProperty";
 import RentalProperty from "../../src/artifacts/contracts/RentalProperty.sol/RentalProperty.json"; // 导入 RentalProperty 合约的 ABI 和 bytecode
 import RentalEscrow from "../../src/artifacts/contracts/RentalEscrow.sol/RentalEscrow.json"; // 导入 RentalEscrow 合约的 ABI 和 bytecode
 
@@ -26,12 +27,17 @@ function Home({ account, setAccount }) {
   const [properties, setProperties] = useState([]);
   const [property, setSelectedProperty] = useState({});
   const [toggle, setToggle] = useState(false); // rentProperty detail 窗口
+  const [addtoggle, setAddtoggle] = useState(false); //add rentProperty 窗口
   const tokenId = 173;
+
+  // 调用部署函数
   async function deployOnclick() {
-    await deploy(); // 调用部署函数
-    // 刷新页面信息
+    await deploy();
     await loadBlockchainDataOnclick();
   }
+
+  // 添加 房产
+  async function addPropertyOnclick() {}
 
   const loadBlockchainData = async () => {
     // try {
@@ -79,7 +85,7 @@ function Home({ account, setAccount }) {
 
       // propertyInfo -> [landlord, isAvailable, rentPrice, securityDeposit, tenant]
       const [landlord, isAvailable, rentPrice, securityDeposit, tenant] =
-        await rentalEscrow.getPropertyInfo(tokenId);
+        await rentalProperty.getPropertyInfo(tokenId);
       // console.log("租客地址: ", tenant);
       let isRented = await rentalProperty.isRented(tokenId);
 
@@ -135,7 +141,9 @@ function Home({ account, setAccount }) {
     setSelectedProperty(property); // 设置选中的房产信息
     setToggle(!toggle); // 切换弹出框状态（显示/隐藏）
   };
-
+  const addtogglePop = () => {
+    setAddtoggle(!addtoggle); // 切换弹出框状态（显示/隐藏）
+  };
   // 点击按钮时手动调用加载区块链数据函数
   async function loadBlockchainDataOnclick() {
     loadBlockchainData(); // 调用主加载函数
@@ -146,12 +154,16 @@ function Home({ account, setAccount }) {
       <Navigation account={account} setAccount={setAccount} />
       <Search />
 
-      <div className="cards__section">
-        <h3>
-          <button onClick={deployOnclick}>deploy</button>{" "}
-          {/* <button onClick={loadBlockchainDataOnclick}>reflesh</button>{" "} */}
-          Properties For Rent
-        </h3>
+      <div className="home_container">
+        <div className="home_container_title">
+          <h2> Properties For Rent </h2>
+          <button onClick={deployOnclick}>deploy</button>
+          {/* <button onClick={loadBlockchainDataOnclick}>reflesh</button> */}
+
+          <div className="home_addProperty_Button">
+            <button onClick={() => addtogglePop()}>add</button>
+          </div>
+        </div>
         <hr />
         <div className="cards">
           {properties.map((property, index) => (
@@ -189,6 +201,14 @@ function Home({ account, setAccount }) {
         <Detail
           property={property}
           togglePop={togglePop}
+          loadBlockchainData={loadBlockchainData}
+          tokenId={tokenId}
+        />
+      )}
+
+      {addtoggle && (
+        <AddProperty
+          addtogglePop={addtogglePop}
           loadBlockchainData={loadBlockchainData}
           tokenId={tokenId}
         />

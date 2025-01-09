@@ -64,12 +64,17 @@ const ProposalData = ({ xytGovernorAddress, refreshFlag }) => {
       const proposal = {
         proposalId: allProposals[i].proposalId.toString(), // 提案id
         proposer: allProposals[i].proposer, // 提案者
-        voteStart: allProposals[i].voteStart.toString(), // 开始时间，，并转换为年月日格式
+        voteStart: new Date(
+          allProposals[i].voteStart * 1000
+        ).toLocaleDateString(), // 开始时间，，并转换为年月日格式
+
         voteDuration: allProposals[i].voteDuration.toString(), // 持续时间（单位：秒）
         executed: allProposals[i].executed, // 是否执行
         canceled: allProposals[i].canceled, // 是否取消
         etaSeconds: allProposals[i].etaSeconds.toString(), // 时间锁秒数
-        proposalDeadline: allProposals[i].proposalDeadline.toString(), // 结束时间（开始时间 + 持续时间），并转换为年月日格式
+        proposalDeadline: new Date(
+          allProposals[i].proposalDeadline * 1000
+        ).toLocaleDateString(), // 结束时间（开始时间 + 持续时间），并转换为年月日格式
         targets: allProposals[i].targets,
         values: allProposals[i].values,
         calldatas: allProposals[i].calldatas,
@@ -146,26 +151,40 @@ const ProposalData = ({ xytGovernorAddress, refreshFlag }) => {
                       ? "⏰ POLL ENDED "
                       : "🕒 POLLING "}
                     state: {proposalData.state}
-                    <br />
-                    {/* <h5>nowClock:{clock}</h5> */}
-                    <h5> End time:{proposalData.proposalDeadline}</h5>
+                    <br />{" "}
                   </span>
+                </div>
+                <div className="proposal-endtime">
+                  <h5> End time:{proposalData.proposalDeadline}</h5>
                 </div>
                 <div className="progress-bar">
                   <div
                     className="progress-bar-support"
-                    style={{ width: `${proposalData.forVotes}%` }}
+                    style={{
+                      width: `${proposalData.forVotes}%`,
+                    }}
+                    title={`Support: ${proposalData.forVotes}%`}
                   ></div>
                   <div
                     className="progress-bar-abstain"
                     style={{
-                      width: `${proposalData.abstain}%`,
+                      width: `${proposalData.abstainVotes}%`,
                       left: `${proposalData.forVotes}%`,
+                      position: "absolute", // 确保 abstain 部分位于正确位置
                     }}
+                    title={`Abstain: ${proposalData.abstainVotes}%`}
                   ></div>
                   <div
                     className="progress-bar-oppose"
-                    style={{ width: `${proposalData.againstVotes}%` }}
+                    style={{
+                      width: `${proposalData.againstVotes}%`,
+                      left: `${
+                        parseFloat(proposalData.forVotes) +
+                        parseFloat(proposalData.abstainVotes)
+                      }%`, // 确保 oppose 部分紧接在 abstain 后
+                      position: "absolute", // 确保 oppose 部分位于正确位置
+                    }}
+                    title={`Oppose: ${proposalData.againstVotes}%`}
                   ></div>
                 </div>
 
@@ -180,12 +199,16 @@ const ProposalData = ({ xytGovernorAddress, refreshFlag }) => {
                     Oppose {proposalData.againstVotes}%
                   </p>
                 </div>
-                <p className="transaction-targets-btn">
+                <p className="transaction-targets">
                   {/* Transaction Hash:{" "}
                   {proposalData.transactionHash
                     ? proposalData.transactionHash.slice(0, 5) + "..."
                     : ""} */}
-                  Targets: {proposalData.targets}
+                  <a
+                    href={`https://sepolia.etherscan.io/address/${proposalData.targets}`}
+                  >
+                    Targets: {proposalData.targets}
+                  </a>
                 </p>
               </div>
             );
@@ -196,7 +219,7 @@ const ProposalData = ({ xytGovernorAddress, refreshFlag }) => {
             Refresh
           </button>
 
-          <button className="refresh-btn" onClick={moveBlocksOnclick}></button>
+          {/* <button className="refresh-btn" onClick={moveBlocksOnclick}></button> */}
         </div>
       </div>
     </div>

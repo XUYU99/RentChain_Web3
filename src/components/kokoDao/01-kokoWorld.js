@@ -37,7 +37,7 @@ function Kokoworld({ account, setAccount }) {
   const [refreshFlag, setRefreshFlag] = useState(false); // 定义刷新状态
   // 定义状态变量，用于存储输入框的值
   const [xytGovernorAddress, setxytGovernorAddress] = useState(
-    "0xc5a5C42992dECbae36851359345FE25997F5C42d"
+    "0xC9a43158891282A2B1475592D5719c001986Aaec"
   );
   const [xytGovernorContract, setxytGovernorContract] = useState();
   const [kokoTokenContract, setkokoTokenContract] = useState();
@@ -405,9 +405,7 @@ function Kokoworld({ account, setAccount }) {
               </div>
               <div className="kokoDao_operate_container">
                 <div className="kokoDao_operate">
-                  <div className="DAO_title">
-                    <Text fontSize="33px">Welcome to DAO world !</Text>
-                  </div>
+                  <div className="DAO_title">Welcome to DAO world !</div>
                   <div className="kokoDao_deploy">
                     {" "}
                     {/* deploy 按钮 */}

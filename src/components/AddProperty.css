@@ -1,0 +1,135 @@
+.addProperty_window {
+  position: fixed; /* 将覆盖层固定在屏幕上 */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-family: "Open Sans";
+  background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色背景 */
+  display: flex; /* 使用 flexbox */
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+}
+.addProperty_loading-spinner {
+  width: 65%;
+  background-color: #fff; /* 背景色可以根据需要调整 */
+  padding: 50px 90px;
+  border-radius: 10px; /* 可选，圆角 */
+  font-size: 20px; /* 字体大小 */
+  font-family: "Open Sans";
+  color: #333; /* 字体颜色 */
+  display: flex; /* 使用 flexbox */
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+  flex-direction: column; /* 垂直排列子元素 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 阴影效果 */
+  animation: fadeIn 0.3s ease-out; /* 弹窗淡入动画 */
+}
+
+.addProperty_container {
+  width: 100%;
+  display: flex; /* 使用 flexbox */
+  flex-direction: column; /* 水平排列子元素 */
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+}
+.addProperty_title {
+  font-size: 27px;
+  font-weight: 600;
+  margin: 10px;
+  text-shadow: 2px 2px 4px rgba(99, 98, 98, 0.5); /* 字体阴影 */
+}
+.addProperty_input_module {
+  width: 100%;
+  display: flex; /* 使用 flexbox */
+  flex-direction: column; /* 水平排列子元素 */
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+  font-size: 16px;
+}
+
+.input_name,
+.input_address,
+.input_description,
+.input_imageUrl,
+.input_attributes {
+  width: 100%;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 20px;
+  display: flex; /* 使用 flexbox */
+  flex-direction: row; /* 水平排列子元素 */
+  align-items: center; /* 垂直居中 */
+}
+.addProperty_input_module p {
+}
+.addProperty_input_module input {
+  width: 400px;
+  height: 35px;
+  margin: 0px 5px;
+  padding: 10px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.input_name input {
+  width: 250px;
+}
+.input_description {
+  width: 100%;
+  flex-direction: column; /* 水平排列子元素 */
+}
+.input_description p {
+  width: 100%;
+}
+
+.input_description textarea {
+  width: 97%;
+  height: 100px;
+  margin: 10px;
+  padding: 10px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: none; /* 禁止用户调整大小 */
+  box-sizing: border-box; /* 包括内边距在宽度和高度内 */
+  overflow-wrap: break-word; /* 自动换行 */
+  word-wrap: break-word; /* 为兼容性添加 */
+  white-space: pre-wrap; /* 保留空格和换行 */
+}
+.input_attributes textarea {
+  width: 400px;
+  height: 60px;
+  margin: 0px 5px;
+  padding: 10px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* 包括内边距在宽度和高度内 */
+  overflow-wrap: break-word; /* 自动换行 */
+  word-wrap: break-word; /* 为兼容性添加 */
+  white-space: pre-wrap; /* 保留空格和换行 */
+}
+.addProperty_button {
+  width: 100%;
+  height: 100%;
+  margin: 20px 20px 0px 20px;
+  display: flex; /* 使用 flexbox */
+  flex-direction: row; /* 水平排列子元素 */
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+}
+.addProperty_button button {
+  width: 110px;
+  height: 40px;
+  margin: 10px 80px 0px 80px;
+  background-color: var(--clr-blue);
+  color: #fff;
+  border: none;
+  border-radius: 5px; /* 更圆润的边角 */
+  font-size: 15px; /* 增大字体 */
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 250ms ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* 按钮阴影效果 */
+}

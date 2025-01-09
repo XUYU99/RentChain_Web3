@@ -55,7 +55,7 @@ async function deploy() {
     console.log(`房产实体 rentalProperty 地址: `, rentalProperty.address); // 输出房产合约的地址
 
     // 获取 NFT 的元数据（metadata）
-    const tokenUrljson = `https://indigo-tiny-aardvark-637.mypinata.cloud/ipfs/QmbbwEY16WqZoLxP4mCpYrqg3YY3oeZBKYrAvQ5H7Lbtzq/${i}.json`;
+    const tokenUrljson = `https://indigo-tiny-aardvark-637.mypinata.cloud/ipfs/bafybeiflft7al6g5ryxjkmubkbbvugyiwxqqledevuntgebeb443pl5gg4/${i}.json`;
     const response = await fetch(tokenUrljson);
     const metadata = await response.json();
     metadataArrary.push(metadata);

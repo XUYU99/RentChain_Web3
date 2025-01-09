@@ -9,24 +9,22 @@
 :root {
   --clr-white: #ffffff;
   --clr-black: #202020;
-  --clr-grey: #707070;
-  --clr-blue: #6c63ff;
-  --clr-blue-2: #4c46b6;
-  --clr-green: #4fb646;
+  --clr-grey: #7a7979;
+  --clr-blue: #3d5d9e;
+  --clr-blue-2: #335598ea;
+  --clr-blue-3: #264787;
+  --clr-orange: #d05f3d;
+  --clr-pink: #d6517d;
+  --clr-pink-2: #b4345f;
+  --clr-black: #000000;
 }
 
 body {
-  margin: 0;
   font-family: "Open Sans";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-h2 {
-  margin-bottom: 20px; /* 设置段落底部的间隔 */
-}
-p {
-  margin-bottom: 10px; /* 设置段落底部的间隔 */
-}
+
 /* ------------------------------------------------------ */
 /* -- NAVIGATION -- */
 
@@ -42,18 +40,23 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  padding: 20px;
+  padding: 5px;
 }
-
-.nav__brand img {
+.nav__logo {
+  width: 70px;
+  height: 60px;
+  margin-right: 10px;
+  background-size: 70px 60px;
+  background-image: url("./assets/RentChainLogo.png");
+}
+/* .nav__brand img {
   max-width: 125px;
   height: auto;
-}
+} */
 
 .nav__brand h1 {
-  color: var(--clr-blue);
-  font-size: 2.5em;
+  color: var(--clr-blue-3);
+  font-size: 38px;
   font-weight: 800;
 }
 
@@ -61,8 +64,8 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
-
   list-style: none;
+  font-weight: 500;
 }
 .nav_address {
   display: flex;
@@ -81,20 +84,20 @@ nav {
 }
 
 .nav__links li a:hover {
-  color: var(--clr-blue);
+  color: var(--clr-blue-3);
 }
 
 .nav__connect {
-  width: 175px;
-  height: 50px;
+  width: 150px;
+  height: 40px;
   margin: 0 30px;
   font-family: "Open Sans";
-  background-color: var(--clr-blue);
+  background-color: var(--clr-blue-3);
   color: var(--clr-white);
   border: none;
   border-radius: 4px;
   font-family: "Open Sans";
-  font-size: 1.1em;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 250ms ease;
@@ -111,8 +114,7 @@ header {
   background-image: url("./assets/houses.png");
   background-position: center;
   background-size: cover;
-  min-height: 40vh;
-
+  min-height: 30vh;
   position: relative;
 }
 
@@ -150,32 +152,57 @@ header {
 }
 
 /* ------------------------------------------------------ */
-/* -- CARDS -- */
+/* -- Home cards -- */
 
-.cards__section {
+.home_container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
-
-.cards__section h3 {
-  margin: 50px 0 20px;
+.home_container_title {
+  margin: 30px 0 5px;
+  display: flex; /* 使用 flexbox */
+  flex-direction: row; /* 水平排列子元素 */
+  align-items: center; /* 垂直居中 */
+}
+.home_container_title h2 {
+  width: 100%;
+}
+.home_addProperty_Button {
+  width: 20%;
+}
+.home_addProperty_Button button {
+  right: 0;
+  width: 100px;
+  height: 30px;
+  margin: 10px;
+  font-family: "Open Sans", sans-serif;
+  background-color: var(--clr-blue-2);
+  color: #fff;
+  border: none;
+  border-radius: 5px; /* 更圆润的边角 */
+  font-size: 16px; /* 增大字体 */
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 250ms ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* 按钮阴影效果 */
 }
 
+.home_addProperty_Button button:hover {
+  background-color: var(--clr-blue); /* 按钮悬停效果 */
+}
 .cards {
   display: grid;
-  gap: 10px;
+  gap: 30px 0px;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
 .card {
-  width: 350px;
-  height: 275px;
-
+  width: 300px;
+  height: 300px;
   border: 1px solid var(--clr-black);
   margin: 10px auto;
-
   cursor: pointer;
   position: relative;
 
@@ -198,14 +225,14 @@ header {
 
 .card__info {
   width: 100%;
-  height: 45%;
+  height: 40%;
 
   background-color: var(--clr-white);
 
   padding: 5px 10px;
 
   position: absolute;
-  bottom: 0;
+  bottom: 20px;
   left: 0;
 }
 
@@ -224,135 +251,132 @@ header {
 /* ------------------------------------------------------ */
 /* -- HOMES -- */
 
-.home {
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.7);
-
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.home__details {
+.home_details {
   display: grid;
-  /* grid-template-columns: repeat(2, 1fr); */
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
   align-items: center;
-
   width: 80%;
   height: 70%;
   margin: 0 auto;
-  padding: 20px;
-
+  padding: 40px 20px;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
-
   background: var(--clr-white);
+  display: flex; /* 使用 flexbox */
+  flex-direction: row; /* 垂直排列子元素 */
+  align-items: center; /* 垂直居中 */
 }
 
-.home__image {
-  max-width: 500px;
-  margin: 20px auto;
-}
-
-.home__image img {
-  max-width: 100%;
-}
-
-.home__close {
+.home_details_close {
   position: absolute;
   top: 10px;
   right: 10px;
-
   width: 30px;
   height: 30px;
-
   background: transparent;
   border: none;
-
   cursor: pointer;
 }
 
-.home__close img {
+.home_details_close img {
   width: 25px;
   height: 25px;
 }
+.home_details_image {
+  max-width: 550px;
+  padding: 10px 30px 10px 10px;
+}
 
-.home__overview {
+.home_details_image img {
+  width: 380px;
+}
+.home_details_overview {
   height: 100%;
-  margin: 0 20px;
-  padding-right: 40px;
-
+  margin: 0 5px;
+  padding-right: 20px;
   overflow-y: scroll;
 }
 
-.home__overview h1,
-.home__overview h2,
-.home__overview hr {
+/* 定义滚动条样式 */
+.home_details_overview::-webkit-scrollbar {
+  width: 5px; /* 设置滚动条的宽度 */
+}
+
+/* 定义滚动条滑块的样式 */
+.home_details_overview::-webkit-scrollbar-thumb {
+  background-color: #bbb; /* 滑块的背景颜色（浅灰色） */
+  border-radius: 4px; /* 设置滑块的圆角，使其更加圆润 */
+  margin-top: 10px;
+}
+
+/* 当鼠标悬停在滚动条滑块上时的样式 */
+.home_details_overview::-webkit-scrollbar-thumb:hover {
+  background-color: #888; /* 悬停时滑块的背景颜色（较深的灰色） */
+}
+
+.home_details_overview h2,
+.home_details_overview h3 {
   margin: 10px auto;
 }
 
-.home__overview ul {
+.home_details_overview ul {
   margin-left: 40px;
 }
-
-.home__buy,
-.home__contact,
-.home__owned {
-  margin: 20px 5px;
-
-  background-color: var(--clr-blue);
-  color: var(--clr-white);
-
-  border: none;
-  border-radius: 4px;
-
-  font-family: "Open Sans";
-  font-size: 1.1em;
-  font-weight: 600;
-
-  cursor: pointer;
-  transition: all 250ms ease;
+/* 默认链接样式 */
+.home_details_overview a {
+  text-decoration: none; /* 移除下划线 */
+  color: #2a5c91e3; /* 设置链接的默认颜色 */
+  font-weight: bold; /* 加粗字体 */
+  transition: color 0.3s ease; /* 添加颜色变化的过渡效果 */
 }
 
-.home__buy {
-  width: 225px;
-  height: 50px;
+/* 鼠标悬停时的样式 */
+.home_details_overview a:hover {
+  color: #12365d; /* 鼠标悬停时改变颜色 */
+  text-decoration: underline; /* 鼠标悬停时显示下划线 */
 }
 
-.home__buy:hover {
-  background-color: var(--clr-blue-2);
+/* 已访问链接样式 */
+.home_details_overview a:visited {
+  color: #6c757d; /* 已访问链接显示为灰色 */
 }
 
-.home__contact {
-  width: 150px;
-  height: 50px;
-
+.home_details_rent {
+  width: 120px;
+  height: 40px;
+  margin: 10px 40px;
   background-color: transparent;
+  font-size: 17px;
+  font-weight: 600;
   color: var(--clr-blue);
-
-  border: 1px solid var(--clr-blue);
+  border-radius: 8px;
+  border: 2px solid var(--clr-blue);
 }
-
-.home__contact:hover {
+.home_details_rent:hover {
   background-color: #f7f7f7;
   color: var(--clr-blue-2);
 }
-
-.home__owned {
-  height: 50px;
-  background-color: var(--clr-green);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  cursor: default;
+.home_details_rented {
+  width: 250px;
+  height: 40px;
+  margin: 20px 5px;
+  padding: 5px;
+  background-color: var(--clr-orange);
+  color: var(--clr-white);
+  border: none;
+  border-radius: 4px;
+  font-size: 17px;
+  text-align: center;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 250ms ease;
+}
+.home_details_rented_tenant {
+  color: #6b6b6b;
+  font-size: 15px;
 }
 
 .loading-overlay {
@@ -368,9 +392,9 @@ header {
   align-items: center; /* 垂直居中 */
 }
 .loading-spinner {
+  width: 70%;
   background-color: #fff; /* 背景色可以根据需要调整 */
   padding: 20px;
-
   border-radius: 10px; /* 可选，圆角 */
   font-size: 20px; /* 字体大小 */
   font-family: "Open Sans";
@@ -387,34 +411,39 @@ header {
   width: auto; /* 容器宽度 */
   height: auto; /* 容器高度自动适应内容 */
   border-radius: 10px; /* 圆角 */
-  font-size: 19px; /* 字体大小 */
+  font-size: 17px; /* 字体大小 */
   font-family: "Open Sans", sans-serif; /* 字体 */
   color: #333; /* 字体颜色 */
   display: flex; /* 使用 flexbox */
   flex-direction: column; /* 垂直排列子元素 */
   justify-content: flex-start; /* 内容从顶部开始排列 */
   align-items: flex-start; /* 左对齐 */
-  padding: 30px; /* 内边距 */
+  padding: 20px; /* 内边距 */
+}
+.loading-successmessage p {
+  margin: 5px 0px;
 }
 /* 成功消息按钮样式 */
 .successmessage-button {
-  width: 150px;
-  height: 50px;
-  margin: 20px;
+  width: 120px;
+  height: 40px;
+  margin: 10px;
   font-family: "Open Sans", sans-serif;
-  background-color: #6c63ff; /* 使用绿色背景 */
+  font-size: 16px; /* 字体 */
+  font-weight: 600;
   color: #fff;
+  background-color: var(--clr-blue);
+
   border: none;
   border-radius: 5px; /* 更圆润的边角 */
-  font-size: 1.2em; /* 增大字体 */
-  font-weight: 600;
+
   cursor: pointer;
   transition: all 250ms ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* 按钮阴影效果 */
 }
 
 .successmessage-button:hover {
-  background-color: #4c46b6; /* 按钮悬停效果 */
+  background-color: var(--clr-blue-2); /* 按钮悬停效果 */
 }
 
 .successmessage-button:active {

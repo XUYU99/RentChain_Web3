@@ -1,0 +1,176 @@
+.myOrders_rentalProperty {
+  font-family: "Open Sans";
+}
+.myOrders_title {
+  margin: 20px 50px;
+  font-size: 25px;
+  font-weight: 700;
+  color: #333; /* 标题颜色 */
+  text-shadow: 2px 2px 4px rgba(99, 98, 98, 0.5); /* 字体阴影 */
+}
+.myOrders_list {
+  display: flex; /* 使用 flexbox */
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+  flex-direction: column; /* 垂直排列子元素 */
+}
+.myOrders_list_module {
+  display: flex; /* 使用 flexbox */
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+  flex-direction: row; /* 水平排列子元素 */
+  margin: 20px;
+}
+.myOrders_card {
+  width: 250px;
+  height: 275px;
+  border: 1px solid var(--clr-black);
+  margin: 10px auto;
+  cursor: pointer;
+  position: relative;
+
+  transition: all 250ms ease;
+}
+
+.myOrders_card:hover {
+  box-shadow: 1px 1px 5px var(--clr-grey);
+}
+
+.myOrders_card__image img {
+  z-index: -1;
+  max-width: 100%;
+}
+
+.myOrders_card__info {
+  width: 100%;
+  height: 35%;
+  font-family: "Open Sans";
+  background-color: var(--clr-white);
+  padding: 5px 10px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  overflow: hidden; /* 防止溢出 */
+}
+
+.myOrders_card__info h4 {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.myOrders_card__info p {
+  font-size: 10px;
+  margin-top: 5px;
+}
+
+.myOrders_info {
+  flex: 2;
+  width: 650px;
+  height: 260px;
+  background-color: #fff; /* 背景色可以根据需要调整 */
+  margin-left: 70px;
+  border-radius: 10px; /* 可选，圆角 */
+  font-size: 15px; /* 字体大小 */
+  font-family: "Open Sans";
+  color: #333; /* 字体颜色 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 框 阴影效果 */
+  display: flex; /* 使用 flexbox */
+  flex-direction: column; /* 垂直排列子元素 */
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+}
+
+.myOrders_info_title {
+  font-size: 21px; /* 标题字体大小 */
+  font-weight: 700;
+  color: #333; /* 标题颜色 */
+  margin: 5px 0px;
+}
+
+.myOrders_info_details {
+  margin: 5px 20px;
+  width: 100%;
+  height: 100%;
+  padding: 0 20px;
+  display: flex; /* 使用 flexbox */
+  flex-direction: column; /* 水平排列子元素 */
+  justify-content: center; /* 水平居中 */
+}
+.myOrders_info_date {
+  margin: 5px 30px;
+}
+.myOrders_info_price {
+  margin: 5px 30px;
+}
+.detail-label {
+  font-size: 15px;
+  font-weight: bold;
+  color: #555;
+}
+
+.detail-value {
+  margin: 0 10px;
+  font-size: 13px;
+  color: #777;
+  font-weight: 600;
+}
+
+.detail-value.highlight {
+  font-size: 15px;
+  color: #c15b17; /* 突出的颜色 */
+  font-weight: 700;
+}
+
+.myOrders_info p {
+  display: flex;
+  justify-content: space-between;
+}
+
+.myOrders_info span {
+  flex: 1;
+  text-align: right;
+}
+
+.myOrders_info_address {
+  margin: 0px 20px;
+  line-height: 1.3;
+}
+.myOrders_info_address p {
+  margin: 5px 0;
+  display: flex;
+  justify-content: space-between;
+}
+.myOrders_info_button {
+  width: 100%;
+  height: 100%;
+  display: flex; /* 使用 flexbox */
+  flex-direction: row; /* 水平排列子元素 */
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+}
+.myOrders_info_button button {
+  width: 100px;
+  height: 30px;
+  margin: 0 60px;
+  background-color: var(--clr-blue);
+  color: #fff;
+  border: none;
+  border-radius: 5px; /* 更圆润的边角 */
+  font-size: 14px; /* 增大字体 */
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 250ms ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* 按钮阴影效果 */
+}
+.myOrders_info_button button:hover {
+  background-color: var(--clr-blue-2); /* 按钮悬停效果 */
+}
+
+.myOrders_info_button button:active {
+  transform: scale(0.98); /* 按钮点击时缩放效果 */
+}
+
+.myOrders_list_null p {
+  font-size: 17px;
+  margin: 20px;
+}
